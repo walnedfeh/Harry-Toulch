@@ -1,0 +1,314 @@
+<div class="container">
+    <mat-card>
+        <mat-card-header>
+            <mat-progress-bar mode="indeterminate" *ngIf="patientFormSpinnerEnabled"></mat-progress-bar>
+            <mat-card-title>Harry Toulch</mat-card-title>
+            <mat-card-subtitle>Patient Form</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+
+            <form [formGroup]="PatientForm" (ngSubmit)="onPatientFormSubmit($event)">
+                <div class="row">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>First Name <small>(required)</small></mat-label>
+                        <input type="text" formControlName="firstName" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Last Name <small>(required)</small></mat-label>
+                        <input type="text" formControlName="lastName" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Birthdate <small>(required)</small></mat-label>
+                        <input type="date" formControlName="birthDate" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Email <small>(required)</small></mat-label>
+                        <input type="email" formControlName="email" matInput placeholder="example@example.example">
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Cell <small>(required)</small></mat-label>
+                        <app-tel-input formControlName="cell"></app-tel-input>
+                        <mat-hint>Include area code</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Phone <small>(required)</small></mat-label>
+                        <app-tel-input formControlName="phone"></app-tel-input>
+                        <mat-hint>Include area code</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Health Card </mat-label>
+                        <input type="text" formControlName="healthCard" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Insurance Company </mat-label>
+                        <input type="text" formControlName="insuranceCompany" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>Address <small>(required)</small> </mat-label>
+                        <input type="text" [formControl]="myControl" matInput [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="GetItemDetails($event.option.value)"
+                            [displayWith]="displayFn" showPanel="true">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{option.Next=='Find' || option.Next==''?option.Description:option.Text}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>Street Number <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="streetNum" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>Street Name <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="streetName" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>Building Number <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="BuildingNum" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>Building Name <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="BuildingName" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>Sub Bulding <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="SubBuilding" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>City <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="City" id="City" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>Province <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="Province" id="Province" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>PostalCode <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="PostalCode" id="PostalCode" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                        <mat-label>Country <small>(required)</small> </mat-label>
+                        <input type="text" formControlName="Country" id="Country" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <div class="d-flex justify-content-center">
+                        <button mat-flat-button color="primary" style="width: 150px;" type="submit">Submit</button>
+                    </div>
+                </div>
+                <div class="row" *ngIf="patientFormSpinnerEnabled">
+                    <div class="d-flex justify-content-center">
+                        <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                    </div>
+                </div>
+
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+
+</div>
+
+<!-- <form [formGroup]="PatientForm" (ngSubmit)="onPatientFormSubmit($event)">
+    <div class="container">
+        <div class="row">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Harry Toulch</mat-card-title>
+                    <mat-card-subtitle>Patient Form</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-form-field style="width: 400px;">
+                        <input type="text" placeholder="Enter Address" [formControl]="myControl" matInput
+                            [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="GetItemDetails($event.option.value)"
+                            [displayWith]="displayFn" showPanel="true">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{option.Next=='Find' || option.Next==''?option.Description:option.Text}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Line 1 </mat-label>
+                                <input type="text" formControlName="AddressLine1" id="AddressLine1" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Line 2</mat-label>
+                                <input type="text" formControlName="AddressLine2" id="AddressLine2" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Line 3</mat-label>
+                                <input type="text" formControlName="AddressLine3" id="AddressLine3" placeholder="Line 3"
+                                    matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Line 4</mat-label>
+                                <input type="text" formControlName="AddressLine4" id="AddressLine4" placeholder="Line 4"
+                                    matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Line 5</mat-label>
+                                <input type="text" formControlName="AddressLine5" id="AddressLine5" placeholder="Line 5"
+                                    matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>City</mat-label>
+                                <input type="text" formControlName="City" id="City" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Province</mat-label>
+                                <input type="text" formControlName="Province" id="Province" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>PostalCode</mat-label>
+                                <input type="text" formControlName="PostalCode" id="PostalCode" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Country</mat-label>
+                                <input type="text" formControlName="Country" id="Country" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Organization</mat-label>
+                                <input type="text" formControlName="Organization" id="Organization" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>SearchInput</mat-label>
+                                <input type="text" formControlName="SearchInput" id="SearchInput" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>BuildingName</mat-label>
+                                <input type="text" formControlName="BuildingName" id="BuildingName" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>BuildingNum</mat-label>
+                                <input type="text" formControlName="BuildingNum" id="BuildingNum" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>SubBuilding</mat-label>
+                                <input type="text" formControlName="SubBuilding" id="SubBuilding" matInput>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Street</mat-label>
+                                <input type="text" formControlName="Street" id="Street" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>District</mat-label>
+                                <input type="text" formControlName="District" id="District" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>ProvinceName</mat-label>
+                                <input type="text" formControlName="ProvinceName" id="ProvinceName" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>ProvinceCode</mat-label>
+                                <input type="text" formControlName="ProvinceCode" id="ProvinceCode" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>FormattedAddress</mat-label>
+                                <input type="text" formControlName="FormattedAddress" id="FormattedAddress" matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button type="submit" color="primary">Submit</button>
+                    <button mat-button type="button" (click)="ResetPatientForm()">Reset</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div class="row pt-3">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Harry Toulch</mat-card-title>
+                    <mat-card-subtitle>Patient Form Value</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="row">
+                        <div class="col">
+                            <p><strong>AddressLine1:</strong>{{PatientForm.value.AddressLine1}}</p>
+                            <p><strong>City:</strong>{{PatientForm.value.City}}</p>
+                            <p><strong>Province:</strong>{{PatientForm.value.Province}}</p>
+                            <p><strong>PostalCode:</strong>{{PatientForm.value.PostalCode}}</p>
+                            <p><strong>Country:</strong>{{PatientForm.value.Country}}</p>
+                            <p><strong>BuildingName:</strong>{{PatientForm.value.BuildingName}}</p>
+                            <p><strong>BuildingNum:</strong>{{PatientForm.value.BuildingNum}}</p>
+                            <p><strong>SubBuilding:</strong>{{PatientForm.value.SubBuilding}}</p>
+                            <p><strong>Street:</strong>{{PatientForm.value.Street}}</p>
+                            <p><strong>ProvinceName:</strong>{{PatientForm.value.ProvinceName}}</p>
+                            <p><strong>ProvinceCode:</strong>{{PatientForm.value.ProvinceCode}}</p>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+        <div class="row pt-3">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Harry Toulch</mat-card-title>
+                    <mat-card-subtitle>Email Verify</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="row">
+                        <div class="col">
+                            <div class="col">
+                                <mat-form-field style="width: 400px;">
+                                    <mat-label>Email</mat-label>
+                                    <input type="text" formControlName="Email" placeholder="Example@Example.Domain"
+                                        matInput>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <mat-form-field style="width: 400px;">
+                                    <mat-label>Cell</mat-label>
+                                    <input type="text" formControlName="Cell" placeholder="xxx-xxx-xxxx" matInput>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</form>
+ -->

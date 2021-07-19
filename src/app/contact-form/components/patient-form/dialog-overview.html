@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>{{data.SelectedOption.Text}}</h1>
+<div mat-dialog-content>
+    <p>Please Select Address!</p>
+    <mat-selection-list #shoes [multiple]="false" [(ngModel)]="data.DialogSelectedOption">
+        <mat-list-option *ngFor="let item of data.SubOptions" [value]="item">
+            {{item.Next=='Find' || item.Next==''?item.Description:item.Text}}
+        </mat-list-option>
+    </mat-selection-list>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Close</button>
+    <button mat-button [mat-dialog-close]="data.DialogSelectedOption" cdkFocusInitial>Select</button>
+</div>
