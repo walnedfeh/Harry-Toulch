@@ -86,7 +86,7 @@ export class PatientFormComponent implements OnInit {
     p.cell = '(' + this.PatientForm.get('cell')?.value.area + ')' +
       ' ' + this.PatientForm.get('cell')?.value.exchange +
       '-' + this.PatientForm.get('cell')?.value.subscriber;
-    p.phone = '(' + this.PatientForm.get('phone')?.value.area +
+    p.phone = '(' + this.PatientForm.get('phone')?.value.area + ')' +
       ' ' + this.PatientForm.get('phone')?.value.exchange +
       '-' + this.PatientForm.get('phone')?.value.subscriber;
 
@@ -100,8 +100,11 @@ export class PatientFormComponent implements OnInit {
           p.cellZcodes = z;
           this.serv.VerifyEmailBool(p.email).subscribe(a => {
             p.isValidEmail = a;
-            this.patientFormSpinnerEnabled = false;
             console.log(p);
+            this.pserv.sendEmail(p).subscribe(b => {
+              console.log(b);
+              this.patientFormSpinnerEnabled = false;
+            });
           });
         });
       });

@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoginBody } from '../models/login-body';
 import { Patient } from '../models/patient';
+import { Patientdata } from '../models/patientdata';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,10 @@ export class PatientService {
       let token = data['Token'];
       return token;
     }));
+  }
+
+  sendEmail(_body: Patientdata) {
+    return this.http.post('https://harrytoulchregistration.com/api/contact2.php', _body); 
   }
 
 }
