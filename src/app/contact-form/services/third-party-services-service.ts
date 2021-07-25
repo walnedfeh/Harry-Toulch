@@ -24,7 +24,7 @@ export class ThirdPartyServicesService {
       .set('LanguagePreference', Lang)
       .set('Country', Country)
       .set('MaxSuggestions', '7')
-      .set('MaxResults', '1000');
+      .set('MaxResults', '100');
     if (LastId != null) {
       params = new HttpParams().set('Key', 'UM96-MK73-DU91-WE41')
         .set('SearchTerm', searchItem)
@@ -33,7 +33,7 @@ export class ThirdPartyServicesService {
         .set('LastId', LastId)
         .set('Country', Country)
         .set('MaxSuggestions', '7')
-        .set('MaxResults', '1000');
+        .set('MaxResults', '100');
     }
     return this.http.get<any[]>(this.CanadaPostSuggestURL, { params }).pipe(map((data: any) => {
       let tempdata = data["Items"];

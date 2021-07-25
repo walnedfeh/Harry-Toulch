@@ -123,22 +123,22 @@ export class TelInputComponent implements ControlValueAccessor, MatFormFieldCont
     this.parts = formBuilder.group({
       area: [
         null,
-        [Validators.required, Validators.minLength(3), Validators.maxLength(3),]
+        [Validators.required, Validators.minLength(3), Validators.maxLength(3),Validators.pattern('[0-9]{3}')]
       ],
       exchange: [
         null,
-        [Validators.required, Validators.minLength(3), Validators.maxLength(3)]
+        [Validators.required, Validators.minLength(3), Validators.maxLength(3),Validators.pattern('[0-9]{3}')]
       ],
       subscriber: [
         null,
-        [Validators.required, Validators.minLength(4), Validators.maxLength(4)]
+        [Validators.required, Validators.minLength(4), Validators.maxLength(4),Validators.pattern('[0-9]{4}')]
       ]
     });
 
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }
-    this.focused = true;
+    //this.focused = true;
   }
 
   ngOnDestroy() {

@@ -12,82 +12,126 @@
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
                         <mat-label>First Name <small>(required)</small></mat-label>
                         <input type="text" formControlName="firstName" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.firstName.errors?.required">Firstname is required
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
                         <mat-label>Last Name <small>(required)</small></mat-label>
                         <input type="text" formControlName="lastName" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.lastName.errors?.required">Lastname is required
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
                         <mat-label>Birthdate <small>(required)</small></mat-label>
                         <input type="date" formControlName="birthDate" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.birthDate.errors?.required">Birthdate is required
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
                         <mat-label>Email <small>(required)</small></mat-label>
                         <input type="email" formControlName="email" matInput placeholder="example@example.example">
+                        <mat-error *ngIf="PatientFormSubmitted && f.email.errors?.required">E-mail is required
+                        </mat-error>
+                        <mat-error *ngIf="PatientFormSubmitted && f.email.errors?.email">Invalid E-mail format
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Cell <small>(required)</small></mat-label>
+                        <mat-label>Cell Phone Number<small>(required)</small></mat-label>
                         <app-tel-input formControlName="cell"></app-tel-input>
-                        <mat-hint>Include area code</mat-hint>
+                        <!-- <mat-hint>Include area code</mat-hint> -->
+                        <mat-error *ngIf="PatientFormSubmitted && f.cell.errors?.invalidCell">Please enter a valid cell
+                            phone number
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Phone <small>(required)</small></mat-label>
+                        <mat-label>Home Phone Number <small>(optional)</small></mat-label>
                         <app-tel-input formControlName="phone"></app-tel-input>
                         <mat-hint>Include area code</mat-hint>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Health Card </mat-label>
+                        <mat-label>Health Card <small>(optional)</small></mat-label>
                         <input type="text" formControlName="healthCard" matInput>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Insurance Company </mat-label>
+                        <mat-label>Insurance Company <small>(optional)</small></mat-label>
                         <input type="text" formControlName="insuranceCompany" matInput>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <div class="pt-4">
+                        <mat-slide-toggle [color]="'primary'" formControlName="manualAddressSelect">
+                            I would like to enter my address manually.
+                        </mat-slide-toggle>
+                    </div>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="CanadaPostInputEnabled">
                         <mat-label>Address <small>(required)</small> </mat-label>
-                        <input type="text" [formControl]="myControl" matInput [matAutocomplete]="auto">
+                        <input type="text" [formControl]="canadaAdressCompleteControl" matInput
+                            [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="GetItemDetails($event.option.value)"
                             [displayWith]="displayFn" showPanel="true">
                             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                 {{option.Next=='Find' || option.Next==''?option.Description:option.Text}}
                             </mat-option>
                         </mat-autocomplete>
+                        <mat-error *ngIf="PatientFormSubmitted && canadaAdressCompleteControl.hasError('required')">
+                            Address is
+                            required
+                        </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>Street Number <small>(required)</small> </mat-label>
-                        <input type="text" formControlName="streetNum" matInput>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="!CanadaPostInputEnabled">
+                        <mat-label>Address <small>(required)</small></mat-label>
+                        <input type="text" formControlName="manualAddressText" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.manualAddressText.errors?.required">Address is
+                            required
+                        </mat-error>
                     </mat-form-field>
+
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
                         <mat-label>Street Name <small>(required)</small> </mat-label>
                         <input type="text" formControlName="streetName" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.streetName.errors?.required">Street Name is required
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
                         <mat-label>Building Number <small>(required)</small> </mat-label>
-                        <input type="text" formControlName="BuildingNum" matInput>
+                        <input type="text" formControlName="buildingNum" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.buildingNum.errors?.required">Building Number is
+                            required
+                        </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <!-- <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
                         <mat-label>Building Name <small>(required)</small> </mat-label>
                         <input type="text" formControlName="BuildingName" matInput>
-                    </mat-form-field>
+                    </mat-form-field> -->
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>Sub Bulding <small>(required)</small> </mat-label>
-                        <input type="text" formControlName="SubBuilding" matInput>
+                        <mat-label>Apartment Number<small>(optional)</small> </mat-label>
+                        <input type="text" formControlName="subBuilding" matInput>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
                         <mat-label>City <small>(required)</small> </mat-label>
-                        <input type="text" formControlName="City" id="City" matInput>
+                        <input type="text" formControlName="city" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.city.errors?.required">City is
+                            required
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
                         <mat-label>Province <small>(required)</small> </mat-label>
-                        <input type="text" formControlName="Province" id="Province" matInput>
+                        <input type="text" formControlName="province" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.province.errors?.required">Province is
+                            required
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
                         <mat-label>PostalCode <small>(required)</small> </mat-label>
-                        <input type="text" formControlName="PostalCode" id="PostalCode" matInput>
+                        <input type="text" formControlName="postalCode" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.postalCode.errors?.required">PostalCode is
+                            required
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
                         <mat-label>Country <small>(required)</small> </mat-label>
-                        <input type="text" formControlName="Country" id="Country" matInput>
+                        <input type="text" formControlName="country" matInput>
+                        <mat-error *ngIf="PatientFormSubmitted && f.postalCode.errors?.required">Country is
+                            required
+                        </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="row">
@@ -97,8 +141,7 @@
                 </div>
                 <div class="row" *ngIf="patientFormSpinnerEnabled">
                     <div class="d-flex justify-content-center">
-                        <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'">
-                        </mat-progress-spinner>
+                        <p-progressSpinner></p-progressSpinner>
                     </div>
                 </div>
 
@@ -106,8 +149,8 @@
             </form>
         </mat-card-content>
     </mat-card>
-
 </div>
+<p-toast></p-toast>
 
 <!-- <form [formGroup]="PatientForm" (ngSubmit)="onPatientFormSubmit($event)">
     <div class="container">

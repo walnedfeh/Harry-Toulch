@@ -20,6 +20,9 @@ import { PatientsInterceptionsInterceptor } from './interceptors/patients-interc
 import { TelInputComponent } from './components/tel-input/tel-input.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     MatInputModule, MatAutocompleteModule,
     HttpClientModule, MatBottomSheetModule, MatListModule,
-    MatDialogModule, FormsModule, MatProgressBarModule, MatProgressSpinnerModule
+    MatDialogModule, FormsModule, MatProgressBarModule, MatProgressSpinnerModule,
+    MatSlideToggleModule, FormsModule, ToastModule, ProgressSpinnerModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

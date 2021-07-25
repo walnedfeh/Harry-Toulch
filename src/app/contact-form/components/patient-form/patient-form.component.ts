@@ -1,8 +1,10 @@
 import { AfterViewChecked, Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MessageService } from 'primeng/api';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
+import { cellPhoneNumberValidator } from '../../custom-validators/cell-phone-validator';
 import { CanadaPostSuggestItem } from '../../models/canada-post-suggest-item';
 import { CanadaPostSuggestItemDetails } from '../../models/canada-post-suggest-item-details';
 import { Patientdata } from '../../models/patientdata';
@@ -13,19 +15,27 @@ import { MyTel } from '../tel-input/tel-input.component';
 @Component({
   selector: 'app-patient-form',
   templateUrl: './patient-form.component.html',
-  styleUrls: ['./patient-form.component.css']
+  styleUrls: ['./patient-form.component.css'],
+  providers: [MessageService]
 })
 export class PatientFormComponent implements OnInit {
-
+  //patient form attributes
   PatientForm!: FormGroup
   PatientFormSubmitted: boolean = false;
   PatientFormValue: any;
-  myControl = new FormControl();
+  canadaAdressCompleteControl = new FormControl();
   options = [];
   filteredOptions: Observable<CanadaPostSuggestItem[]> = new Observable<CanadaPostSuggestItem[]>();
   AddressFieldsEnabled: boolean = false;
   patientFormSpinnerEnabled: boolean = false;
-  constructor(private fb: FormBuilder, private serv: ThirdPartyServicesService, private dialog: MatDialog, private pserv: PatientService) { }
+  CanadaPostInputEnabled: boolean = true;
+  InitialMobileNumbersValue: MyTel = new MyTel('', '', '');
+  constructor(private fb: FormBuilder,
+    private serv: ThirdPartyServicesService,
+    private dialog: MatDialog,
+    private pserv: PatientService,
+    private messageService: MessageService) { }
+
 
   get f() {
     return this.PatientForm.controls;
@@ -34,28 +44,34 @@ export class PatientFormComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' }, { paramName: 'lastName', paramValue: 'Dummar' }]).subscribe(x => {
+      console.log(x);
+    });
 
+    this.canadaAdressCompleteControl.setValidators(Validators.required);
     this.PatientForm = this.fb.group({
-      firstName: ['',],
-      lastName: ['',],
-      birthDate: ['',],
-      email: ['',],
-      cell: new FormControl(new MyTel('', '', '')),
-      phone: new FormControl(new MyTel('', '', '')),
-      streetName: ['',],
+      firstName: ['', Validators.compose([Validators.required])],
+      lastName: ['', Validators.compose([Validators.required])],
+      birthDate: ['', Validators.compose([Validators.required])],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      cell: new FormControl(this.InitialMobileNumbersValue, cellPhoneNumberValidator()),
+      phone: new FormControl(this.InitialMobileNumbersValue,),
+      streetName: ['', Validators.required],
       streetNum: ['',],
       healthCard: ['',],
       insuranceCompany: ['',],
-      City: ['',],
-      Province: ['',],
-      PostalCode: ['',],
-      Country: ['',],
-      BuildingName: ['',],
-      BuildingNum: ['',],
-      SubBuilding: ['',],
+      city: ['', Validators.required],
+      province: ['', Validators.required],
+      postalCode: ['', Validators.required],
+      country: ['', Validators.required],
+      buildingName: ['',],
+      buildingNum: ['', Validators.required],
+      subBuilding: ['',],
+      manualAddressSelect: [false,],
+      manualAddressText: ['', Validators.required]
     });
 
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredOptions = this.canadaAdressCompleteControl.valueChanges.pipe(
       startWith(''),
       debounceTime(400),
       distinctUntilChanged(),
@@ -63,18 +79,36 @@ export class PatientFormComponent implements OnInit {
         return this.filter(val || '')
       })
     );
-    this.filteredOptions.subscribe(x => {
-      console.log(x);
-    });
 
-
-    this.serv.VerifyEmail('williamnodfah@gmail.com').subscribe(x => {
-      console.log(x);
+    this.PatientForm.get('manualAddressSelect')?.valueChanges.subscribe((t: boolean) => {
+      this.PatientForm.controls.city.setValue('');
+      this.PatientForm.controls.province.setValue('');
+      this.PatientForm.controls.postalCode.setValue('');
+      this.PatientForm.controls.country.setValue('');
+      this.PatientForm.controls.buildingNum.setValue('');
+      this.PatientForm.controls.manualAddressText.setValue('');
+      this.PatientForm.controls.buildingName.setValue('');
+      this.PatientForm.controls.subBuilding.setValue('');
+      this.canadaAdressCompleteControl.setValue('');
+      if (t == true) {
+        this.CanadaPostInputEnabled = false;
+        this.AddressFieldsEnabled = true;
+      } else {
+        this.CanadaPostInputEnabled = true;
+        this.AddressFieldsEnabled = false;
+      }
     });
   }
 
   onPatientFormSubmit = (e: any) => {
     this.PatientFormSubmitted = true;
+    if (this.PatientForm.get('manualAddressSelect')?.value == true) {
+      this.canadaAdressCompleteControl.setValue(this.PatientForm.get('manualAddressText')?.value);
+    } else {
+      this.PatientForm.controls.manualAddressText.setValue(this.canadaAdressCompleteControl.value);
+    }
+    console.log(this.PatientForm.controls);
+
     if (this.PatientForm.invalid) {
       e.preventDefault();
       return;
@@ -90,7 +124,7 @@ export class PatientFormComponent implements OnInit {
       ' ' + this.PatientForm.get('phone')?.value.exchange +
       '-' + this.PatientForm.get('phone')?.value.subscriber;
 
-    p.fullAddress = this.myControl.value.Text;
+    p.fullAddress = this.canadaAdressCompleteControl.value.Text;
 
     this.pserv.getParamZcodesStr('email', p.email).subscribe(x => {
       p.emailZcodes = x;
@@ -100,9 +134,16 @@ export class PatientFormComponent implements OnInit {
           p.cellZcodes = z;
           this.serv.VerifyEmailBool(p.email).subscribe(a => {
             p.isValidEmail = a;
+            if (a) {
+              this.messageService.add({ severity: 'success', summary: 'Valid', detail: p.email + ' is valid' });
+            } else {
+              this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
+            }
             console.log(p);
             this.pserv.sendEmail(p).subscribe(b => {
               console.log(b);
+              this.patientFormSpinnerEnabled = false;
+            }, error => {
               this.patientFormSpinnerEnabled = false;
             });
           });
@@ -158,13 +199,13 @@ export class PatientFormComponent implements OnInit {
           this.serv.getCanadaPostItemDetails(result[0].Id).subscribe(res => {
             let result: CanadaPostSuggestItemDetails = res[0];
             this.AddressFieldsEnabled = true;
-            this.PatientForm.controls.City.setValue(result.City);
-            this.PatientForm.controls.Province.setValue(result.Province);
-            this.PatientForm.controls.PostalCode.setValue(result.PostalCode);
-            this.PatientForm.controls.Country.setValue(result.CountryName);
-            this.PatientForm.controls.BuildingName.setValue(result.BuildingName);
-            this.PatientForm.controls.BuildingNum.setValue(result.BuildingNumber);
-            this.PatientForm.controls.SubBuilding.setValue(result.SubBuilding);
+            this.PatientForm.controls.city.setValue(result.City);
+            this.PatientForm.controls.crovince.setValue(result.Province);
+            this.PatientForm.controls.postalCode.setValue(result.PostalCode);
+            this.PatientForm.controls.country.setValue(result.CountryName);
+            this.PatientForm.controls.buildingName.setValue(result.BuildingName);
+            this.PatientForm.controls.buildingNum.setValue(result.BuildingNumber);
+            this.PatientForm.controls.subBuilding.setValue(result.SubBuilding);
             this.PatientForm.controls.streetName.setValue(result.Street);
           });
         });
@@ -176,19 +217,20 @@ export class PatientFormComponent implements OnInit {
 
         let result: CanadaPostSuggestItemDetails = res[0];
         this.AddressFieldsEnabled = true;
-        this.PatientForm.controls.City.setValue(result.City);
-        this.PatientForm.controls.Province.setValue(result.Province);
-        this.PatientForm.controls.PostalCode.setValue(result.PostalCode);
-        this.PatientForm.controls.Country.setValue(result.CountryName);
-        this.PatientForm.controls.BuildingName.setValue(result.BuildingName);
-        this.PatientForm.controls.BuildingNum.setValue(result.BuildingNumber);
-        this.PatientForm.controls.SubBuilding.setValue(result.SubBuilding);
+        this.PatientForm.controls.city.setValue(result.City);
+        this.PatientForm.controls.province.setValue(result.Province);
+        this.PatientForm.controls.postalCode.setValue(result.PostalCode);
+        this.PatientForm.controls.country.setValue(result.CountryName);
+        this.PatientForm.controls.buildingName.setValue(result.BuildingName);
+        this.PatientForm.controls.buildingNum.setValue(result.BuildingNumber);
+        this.PatientForm.controls.subBuilding.setValue(result.SubBuilding);
         this.PatientForm.controls.streetName.setValue(result.Street);
       });
 
     }
 
   }
+
 
   displayFn(item: CanadaPostSuggestItem): string {
     return item && item.Text ? item.Text : '';

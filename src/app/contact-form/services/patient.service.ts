@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoginBody } from '../models/login-body';
+import { Param } from '../models/param';
 import { Patient } from '../models/patient';
 import { Patientdata } from '../models/patientdata';
 
@@ -68,7 +69,52 @@ export class PatientService {
   }
 
   sendEmail(_body: Patientdata) {
-    return this.http.post('https://harrytoulchregistration.com/api/contact2.php', _body); 
+    return this.http.post('http://harrytoulchregistration.com/api/contact2.php', _body);
   }
+
+  /*first and last name services */
+
+  getPatientListByFirstLastName(paramsArr: Param[]): Observable<Patient[]> {
+    let params: HttpParams = new HttpParams().set('match', 'any').set('email', 'a@a.a');
+    paramsArr.forEach(x => {
+      params = params.set(x.paramName, x.paramValue);
+    });
+    return this.http.get<Patient[]>(this.ApiUrl + '/Patient/list', { params }).pipe(
+      map((data: any) => {
+        let tempData = data["patientList"];
+        let result: Patient[] = [];
+        for (let i = 0; i < tempData.length; i++) {
+          let s: Patient = new Patient();
+          s = Object.assign(s, tempData[i]);
+          result.push(s);
+        }
+        return result;
+      })
+    );
+  }
+
+  getPatientListByFirstLastNamezCodesArr(paramsArr: Param[]): Observable<string[]> {
+    return this.getPatientListByFirstLastName(paramsArr).pipe(
+      map((data: Patient[]) => {
+        let result: string[] = [];
+        data.forEach(x => {
+          result.push(x.id);
+        });
+        return result;
+      })
+    );
+  }
+
+  getPatientListByFirstLastNamezCodesStr(paramsArr: Param[]): Observable<string> {
+    return this.getPatientListByFirstLastNamezCodesArr(paramsArr).pipe(
+      map((data: string[]) => {
+        return data.map(x => {
+          let temp = x.split('-')[1];
+          return 'z' + temp;
+        }).join(',');
+      })
+    );
+  }
+
 
 }
