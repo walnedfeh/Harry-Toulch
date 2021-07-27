@@ -23,7 +23,8 @@ export class PatientsInterceptionsInterceptor implements HttpInterceptor {
   private nonInterceptedRequests: string[] = [
     'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws',
     'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws',
-    'https://api.email-validator.net/api/verify'
+    'https://api.email-validator.net/api/verify',
+    this.Url + '/login/doctors'
   ];
   constructor(private router: Router, private http: HttpClient, private serv: PatientService) { }
 

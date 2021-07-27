@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { AddPatientRequest } from '../models/add-patient-request';
 import { LoginBody } from '../models/login-body';
 import { Param } from '../models/param';
 import { Patient } from '../models/patient';
@@ -15,6 +16,19 @@ export class PatientService {
   ApiUrl: string = environment.ApiUrl;
   constructor(private http: HttpClient) { }
 
+  createNewPatient(_body: AddPatientRequest, _token: string): Observable<boolean> {
+    const options = {
+      headers: new HttpHeaders({
+        'Accept': 'application/json,*/*',
+        'Content-Type': 'application/json',
+        'token': _token
+      }),
+    };
+    return this.http.post<boolean>(this.ApiUrl + '/Patient', _body, options).pipe(map((data: any) => {
+      let tempData = data["patient"];
+      return tempData ? true : false;
+    }));
+  }
   getPatientsList(_param: string, _paramVal: string): Observable<Patient[]> {
     const params = new HttpParams().set(_param, _paramVal).set('match', 'all');
     return this.http.get<Patient[]>(this.ApiUrl + '/Patient/list', { params }).pipe(
@@ -116,5 +130,17 @@ export class PatientService {
     );
   }
 
-
+  harryToulchLogin(_userName: string, _password: string, _body: LoginBody): Observable<string> {
+    const options = {
+      headers: new HttpHeaders({
+        'Accept': 'application/json,*/*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(_userName + ':' + _password)
+      }),
+    };
+    return this.http.post<string>(this.ApiUrl + '/login/doctors', _body, options).pipe(map((data: any) => {
+      let token = data['Token'];
+      return token;
+    }));
+  }
 }

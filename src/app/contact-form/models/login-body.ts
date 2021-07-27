@@ -3,6 +3,6 @@ export class LoginBody {
     public expiration: number;
     public storeId!: number;
     constructor() {
-        this.expiration = 1;
+        this.expiration = 24;
     }
 }

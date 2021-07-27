@@ -23,6 +23,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { HttpErrorComponent } from './components/http-error/http-error.component';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ContactFormBaseContentComponent,
     DialogOverviewExampleDialog,
     PatientFormComponent,
-    TelInputComponent
+    TelInputComponent,
+    NotFoundComponent,
+    HttpErrorComponent
 
   ],
   imports: [
@@ -44,7 +49,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     MatInputModule, MatAutocompleteModule,
     HttpClientModule, MatBottomSheetModule, MatListModule,
     MatDialogModule, FormsModule, MatProgressBarModule, MatProgressSpinnerModule,
-    MatSlideToggleModule, FormsModule, ToastModule, ProgressSpinnerModule
+    MatSlideToggleModule, FormsModule, ToastModule, ProgressSpinnerModule, DialogModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
