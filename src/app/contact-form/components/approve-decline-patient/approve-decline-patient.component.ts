@@ -56,7 +56,6 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         p.Province = params.get('Province') || 'n/a';
         p.PostalCode = params.get('PostalCode') || 'n/a';
         p.Country = params.get('Country') || 'n/a';
-        p.BuildingName = params.get('BuildingName') || 'n/a';
         p.BuildingNum = params.get('BuildingNum') || 'n/a';
         p.SubBuilding = params.get('SubBuilding') || 'n/a';
         return p;

@@ -8,6 +8,7 @@ import { LoginBody } from '../models/login-body';
 import { Param } from '../models/param';
 import { Patient } from '../models/patient';
 import { Patientdata } from '../models/patientdata';
+import { ZCodeMatch } from '../models/z-code-match';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,17 @@ export class PatientService {
         return result;
       })
     );
+  }
+
+  getParamZcodesMatch(_param: string, _paramVal: string, _formattedParamName: string): Observable<ZCodeMatch> {
+    return this.getParamZcodesArr(_param, _paramVal).pipe(map((data: string[]) => {
+      let zcmS: ZCodeMatch = new ZCodeMatch();
+      data.forEach(x => {
+        zcmS.zCodes.push('z' + x.split('-')[1]);
+      });
+      zcmS.MatchedField = _formattedParamName;
+      return zcmS;
+    }));
   }
 
   getParamZcodesStr(_param: string, _paramVal: string): Observable<string> {
@@ -144,3 +156,6 @@ export class PatientService {
     }));
   }
 }
+
+
+/* "id": "patient-25406", */
