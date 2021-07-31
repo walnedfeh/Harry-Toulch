@@ -18,8 +18,8 @@ import { PatientService } from '../services/patient.service';
 @Injectable()
 export class PatientsInterceptionsInterceptor implements HttpInterceptor {
   private Url: string = environment.ApiUrl;
-  private accountsId: number = 2040;
-  private storeId: number = 1;
+  private accountsId: number = environment.accountId;
+  private storeId: number = environment.storeId;
   private nonInterceptedRequests: string[] = [
     'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws',
     'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws',

@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: 'contact-form', component: ContactFormBaseContentComponent, children: [
       { path: 'patient-form', component: PatientFormComponent },
-      { path: 'push-patient', component: ApproveDeclinePatientComponent }
+      { path: 'approve-patient', component: ApproveDeclinePatientComponent }
     ]
   },
   { path: 'error', component: HttpErrorComponent },

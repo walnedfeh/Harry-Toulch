@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageService } from 'primeng/api';
 import { Observable, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { cellPhoneNumberValidator } from '../../custom-validators/cell-phone-validator';
 import { PrepareMatchedZcodeFieldsApi, ReverseZcodesMatchingFields } from '../../custom-validators/zcode-matches-reverse';
 import { CanadaPostSuggestItem } from '../../models/canada-post-suggest-item';
@@ -46,7 +46,18 @@ export class PatientFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' }, { paramName: 'lastName', paramValue: 'Dummar' }]).subscribe(x => {
+    this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' },
+    { paramName: 'lastName', paramValue: 'Dummar' }]).pipe(tap({
+      next: (x) => {
+        console.log('tap success', x);
+        //this.isLoading = false;
+      },
+      error: (err) => {
+        console.log('tap error', err);
+        //  this.isLoading = false;
+      },
+      complete: () => { this.messageService.add({ severity: 'info', summary: 'Valid', detail: ' is valid' }); }
+    })).subscribe(x => {
       console.log(x);
     });
 

@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  ApiUrl: 'https://testing.orderoptical.com/Web'
+  ApiUrl: 'https://testing.orderoptical.com/Web',
+  accountId: 2040,
+  storeId: 1
 };
 
 /*

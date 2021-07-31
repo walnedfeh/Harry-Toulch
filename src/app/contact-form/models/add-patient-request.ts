@@ -16,7 +16,7 @@ export class AddPatientRequest {
     public postalCode!: string;
     public province!: string;
     public gender!: number;
-    public streetNumber!: number;
+    public streetNumber!: string;
     public isDefaultSms!: boolean;
     public isDefaultEmail!: boolean;
 

@@ -1,6 +1,5 @@
 <div class="container pt-4">
     <mat-card>
-
         <mat-card-content>
             <div class="row">
                 <div class="col-lg-8 col-md-6 col-sm-4 col-xs-3 p-2">
@@ -87,7 +86,7 @@
 </p-dialog>
 
 
-<p-dialog header="Error" [(visible)]="NotAuthorozedDialogEnabled" [modal]="true" [style]="{width: '30vw'}"
+<p-dialog header="{{NotAuthorozedDialogHeader}}" [(visible)]="NotAuthorozedDialogEnabled" [modal]="true" [style]="{width: '30vw'}"
     [baseZIndex]="10000" [draggable]="false" [resizable]="false" [position]="'top'" [closable]="false">
     <p><strong>{{ErrorMessage}}</strong></p>
 </p-dialog>
