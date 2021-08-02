@@ -18,7 +18,7 @@ export class ThirdPartyServicesService {
   /*Third Party Services Integration*/
 
   getCanadaPostSuggestedItems(searchItem: string, Country: string, Lang: string, LastId?: string): Observable<CanadaPostSuggestItem[]> {
-    let params = new HttpParams().set('Key', 'UM96-MK73-DU91-WE41')
+    let params = new HttpParams().set('Key', 'UB99-TG36-YW24-PC39')
       .set('SearchTerm', searchItem)
       .set('SearchFor', 'Everything')
       .set('LanguagePreference', Lang)
@@ -26,7 +26,7 @@ export class ThirdPartyServicesService {
       .set('MaxSuggestions', '7')
       .set('MaxResults', '100');
     if (LastId != null) {
-      params = new HttpParams().set('Key', 'UM96-MK73-DU91-WE41')
+      params = new HttpParams().set('Key', 'UB99-TG36-YW24-PC39')
         .set('SearchTerm', searchItem)
         .set('LanguagePreference', Lang)
         .set('SearchFor', 'Everything')
@@ -48,7 +48,7 @@ export class ThirdPartyServicesService {
   }
 
   getCanadaPostItemDetails(Id: string): Observable<CanadaPostSuggestItemDetails[]> {
-    const params = new HttpParams().set('Key', 'UM96-MK73-DU91-WE41')
+    const params = new HttpParams().set('Key', 'UB99-TG36-YW24-PC39')
       .set('Id', Id);
     return this.http.get<any[]>(this.CanadaPostItemDetailsURL, { params }).pipe(map((data: any) => {
       let tempdata = data["Items"];

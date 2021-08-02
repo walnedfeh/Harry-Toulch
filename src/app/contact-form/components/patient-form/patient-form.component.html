@@ -1,15 +1,25 @@
 <div class="container">
-    <mat-card>
-        <mat-card-header>
-            <mat-progress-bar mode="indeterminate" *ngIf="patientFormSpinnerEnabled"></mat-progress-bar>
-            <mat-card-title>Harry Toulch</mat-card-title>
-            <mat-card-subtitle>Patient Form</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-center" style="font-size: large;">
+            Patient info
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <mat-form-field appearance="outline" class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-label>Select Language</mat-label>
+                    <mat-select [(ngModel)]="LanguageValue" (selectionChange)="MatSelectLanguage()">
+                        <mat-option [value]="'en'">
+                            English
+                        </mat-option>
+                        <mat-option [value]="'fr'">
+                            Française
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <form [formGroup]="PatientForm" (ngSubmit)="onPatientFormSubmit($event)">
                 <div class="row">
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <!-- <mat-label>First Name <small>(required)</small></mat-label> -->
                         <mat-label>{{'patientform.formfields.fieldslables.firstName'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
@@ -18,7 +28,7 @@
                         <mat-error *ngIf="PatientFormSubmitted && f.firstName.errors?.required">Firstname is required
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.lastName'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -26,7 +36,7 @@
                         <mat-error *ngIf="PatientFormSubmitted && f.lastName.errors?.required">Lastname is required
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.birthDate'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -34,7 +44,7 @@
                         <mat-error *ngIf="PatientFormSubmitted && f.birthDate.errors?.required">Birthdate is required
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.email'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -44,41 +54,37 @@
                         <mat-error *ngIf="PatientFormSubmitted && f.email.errors?.email">Invalid E-mail format
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.cell'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
                         <app-tel-input formControlName="cell"></app-tel-input>
-                        <!-- <mat-hint>Include area code</mat-hint> -->
+                        <mat-hint>Include area code</mat-hint>
                         <mat-error *ngIf="PatientFormSubmitted && f.cell.errors?.invalidCell">Please enter a valid cell
                             phone number
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.phone'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
                         </mat-label>
                         <app-tel-input formControlName="phone"></app-tel-input>
                         <mat-hint>Include area code</mat-hint>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.healthCard'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
                         </mat-label>
                         <input type="text" formControlName="healthCard" matInput>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.insuranceCompany'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
                         </mat-label>
                         <input type="text" formControlName="insuranceCompany" matInput>
                     </mat-form-field>
-                    <div class="pt-4">
-                        <mat-slide-toggle [color]="'primary'" formControlName="manualAddressSelect">
-                            {{'patientform.formfields.fieldslables.manualAddressSelect'| translate}}
-                        </mat-slide-toggle>
-                    </div>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="CanadaPostInputEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="CanadaPostInputEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.canadaAdressCompleteControl'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -93,9 +99,15 @@
                         <mat-error *ngIf="PatientFormSubmitted && canadaAdressCompleteControl.hasError('required')">
                             Address is
                             required
-                        </mat-error>
+                        </mat-error> 
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="!CanadaPostInputEnabled">
+                    <div class="pt-4">
+                        <mat-slide-toggle [color]="'primary'" formControlName="manualAddressSelect">
+                            {{'patientform.formfields.fieldslables.manualAddressSelect'| translate}}
+                        </mat-slide-toggle>
+                    </div>
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="!CanadaPostInputEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.manualAddressText'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -105,7 +117,8 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.streetName'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -113,7 +126,8 @@
                         <mat-error *ngIf="PatientFormSubmitted && f.streetName.errors?.required">Street Name is required
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.buildingNum'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -126,13 +140,15 @@
                         <mat-label>Building Name <small>(required)</small> </mat-label>
                         <input type="text" formControlName="BuildingName" matInput>
                     </mat-form-field> -->
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.subBuilding'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
                         </mat-label>
                         <input type="text" formControlName="subBuilding" matInput>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.city'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -141,7 +157,8 @@
                             required
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.province'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -150,7 +167,8 @@
                             required
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.postalCode'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -159,7 +177,8 @@
                             required
                         </mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
+                    <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled"
+                        appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.country'| translate}}
                             <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
                         </mat-label>
@@ -171,8 +190,7 @@
                 </div>
                 <div class="row">
                     <div class="d-flex justify-content-center">
-                        <button mat-flat-button color="primary" style="width: 150px;"
-                            type="submit">{{'patientform.submitbutton'|translate}}</button>
+                        <button type="submit" class="btn btn-primary">{{'patientform.submitbutton'|translate}}</button>
                     </div>
                 </div>
                 <div class="row" *ngIf="patientFormSpinnerEnabled">
@@ -183,211 +201,32 @@
 
 
             </form>
-        </mat-card-content>
-    </mat-card>
+
+        </div>
+    </div>
 </div>
 <p-toast></p-toast>
 
-<!-- <form [formGroup]="PatientForm" (ngSubmit)="onPatientFormSubmit($event)">
+
+
+<p-dialog header="Language Selection" [(visible)]="LanguageSelectionDialog" [modal]="true" [style]="{width: '50vw'}"
+    [baseZIndex]="10000" [draggable]="false" [resizable]="false" [closable]="true">
+    <div class="d-flex justify-content-center" style="text-align: center;">
+        <p><strong>Please select you language</strong></p>
+    </div>
     <div class="container">
         <div class="row">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>Harry Toulch</mat-card-title>
-                    <mat-card-subtitle>Patient Form</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <mat-form-field style="width: 400px;">
-                        <input type="text" placeholder="Enter Address" [formControl]="myControl" matInput
-                            [matAutocomplete]="auto">
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="GetItemDetails($event.option.value)"
-                            [displayWith]="displayFn" showPanel="true">
-                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                {{option.Next=='Find' || option.Next==''?option.Description:option.Text}}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                    <div class="row">
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Line 1 </mat-label>
-                                <input type="text" formControlName="AddressLine1" id="AddressLine1" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Line 2</mat-label>
-                                <input type="text" formControlName="AddressLine2" id="AddressLine2" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Line 3</mat-label>
-                                <input type="text" formControlName="AddressLine3" id="AddressLine3" placeholder="Line 3"
-                                    matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Line 4</mat-label>
-                                <input type="text" formControlName="AddressLine4" id="AddressLine4" placeholder="Line 4"
-                                    matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Line 5</mat-label>
-                                <input type="text" formControlName="AddressLine5" id="AddressLine5" placeholder="Line 5"
-                                    matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>City</mat-label>
-                                <input type="text" formControlName="City" id="City" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Province</mat-label>
-                                <input type="text" formControlName="Province" id="Province" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>PostalCode</mat-label>
-                                <input type="text" formControlName="PostalCode" id="PostalCode" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Country</mat-label>
-                                <input type="text" formControlName="Country" id="Country" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Organization</mat-label>
-                                <input type="text" formControlName="Organization" id="Organization" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>SearchInput</mat-label>
-                                <input type="text" formControlName="SearchInput" id="SearchInput" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>BuildingName</mat-label>
-                                <input type="text" formControlName="BuildingName" id="BuildingName" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>BuildingNum</mat-label>
-                                <input type="text" formControlName="BuildingNum" id="BuildingNum" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>SubBuilding</mat-label>
-                                <input type="text" formControlName="SubBuilding" id="SubBuilding" matInput>
-                            </mat-form-field>
-                        </div>
 
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>Street</mat-label>
-                                <input type="text" formControlName="Street" id="Street" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>District</mat-label>
-                                <input type="text" formControlName="District" id="District" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>ProvinceName</mat-label>
-                                <input type="text" formControlName="ProvinceName" id="ProvinceName" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>ProvinceCode</mat-label>
-                                <input type="text" formControlName="ProvinceCode" id="ProvinceCode" matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field>
-                                <mat-label>FormattedAddress</mat-label>
-                                <input type="text" formControlName="FormattedAddress" id="FormattedAddress" matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                </mat-card-content>
-                <mat-card-actions>
-                    <button mat-raised-button type="submit" color="primary">Submit</button>
-                    <button mat-button type="button" (click)="ResetPatientForm()">Reset</button>
-                </mat-card-actions>
-            </mat-card>
-        </div>
-        <div class="row pt-3">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>Harry Toulch</mat-card-title>
-                    <mat-card-subtitle>Patient Form Value</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <div class="row">
-                        <div class="col">
-                            <p><strong>AddressLine1:</strong>{{PatientForm.value.AddressLine1}}</p>
-                            <p><strong>City:</strong>{{PatientForm.value.City}}</p>
-                            <p><strong>Province:</strong>{{PatientForm.value.Province}}</p>
-                            <p><strong>PostalCode:</strong>{{PatientForm.value.PostalCode}}</p>
-                            <p><strong>Country:</strong>{{PatientForm.value.Country}}</p>
-                            <p><strong>BuildingName:</strong>{{PatientForm.value.BuildingName}}</p>
-                            <p><strong>BuildingNum:</strong>{{PatientForm.value.BuildingNum}}</p>
-                            <p><strong>SubBuilding:</strong>{{PatientForm.value.SubBuilding}}</p>
-                            <p><strong>Street:</strong>{{PatientForm.value.Street}}</p>
-                            <p><strong>ProvinceName:</strong>{{PatientForm.value.ProvinceName}}</p>
-                            <p><strong>ProvinceCode:</strong>{{PatientForm.value.ProvinceCode}}</p>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-        </div>
-        <div class="row pt-3">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>Harry Toulch</mat-card-title>
-                    <mat-card-subtitle>Email Verify</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <div class="row">
-                        <div class="col">
-                            <div class="col">
-                                <mat-form-field style="width: 400px;">
-                                    <mat-label>Email</mat-label>
-                                    <input type="text" formControlName="Email" placeholder="Example@Example.Domain"
-                                        matInput>
-                                </mat-form-field>
-                            </div>
-                            <div class="col">
-                                <mat-form-field style="width: 400px;">
-                                    <mat-label>Cell</mat-label>
-                                    <input type="text" formControlName="Cell" placeholder="xxx-xxx-xxxx" matInput>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
+            <div class="d-flex flex-wrap justify-content-center">
+                <div class=" p-2">
+                    <button pButton pRipple type="button" label="English" class="p-button-raised" style="width: 150px;"
+                        (click)="DialogSelectLanguage('en')"></button>
+                </div>
+                <div class=" p-2">
+                    <button pButton pRipple type="button" label="Française" class="p-button-raised p-button-help"
+                        style="width: 150px;" (click)="DialogSelectLanguage('fr')"></button>
+                </div>
+            </div>
         </div>
     </div>
-</form>
- -->
+</p-dialog>

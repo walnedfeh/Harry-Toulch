@@ -13,6 +13,7 @@ import { ZCodeMatch } from '../../models/z-code-match';
 import { PatientService } from '../../services/patient.service';
 import { ThirdPartyServicesService } from '../../services/third-party-services-service';
 import { MyTel } from '../tel-input/tel-input.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-patient-form',
@@ -32,11 +33,37 @@ export class PatientFormComponent implements OnInit {
   patientFormSpinnerEnabled: boolean = false;
   CanadaPostInputEnabled: boolean = true;
   InitialMobileNumbersValue: MyTel = new MyTel('', '', '');
+
+  //language configuration
+  LanguageValue: string = 'en';
+  LanguageSelectionDialog: boolean = true;
+  supportLanguages = ['en', 'fr'];
+
   constructor(private fb: FormBuilder,
     private serv: ThirdPartyServicesService,
     private dialog: MatDialog,
     private pserv: PatientService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private translateService: TranslateService) {
+    this.translateService.addLangs(this.supportLanguages);
+    this.translateService.setDefaultLang('en');
+    const browserlang = this.translateService.getBrowserLang();
+    if (this.supportLanguages.includes(browserlang)) {
+      this.translateService.use(browserlang);
+      this.LanguageValue = browserlang;
+    }
+  }
+  //language events
+  
+  MatSelectLanguage() {
+    this.translateService.use(this.LanguageValue);
+  }
+
+  DialogSelectLanguage(_lang: string) {
+    this.LanguageValue = _lang;
+    this.translateService.use(this.LanguageValue);
+    this.LanguageSelectionDialog = false;
+  }
 
 
   get f() {

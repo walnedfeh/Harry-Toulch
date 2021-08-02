@@ -7,30 +7,14 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./contact-form-base-content.component.css']
 })
 export class ContactFormBaseContentComponent implements OnInit {
-  LanguageValue: string = 'en';
-  LanguageSelectionDialog: boolean = true;
-  supportLanguages = ['en', 'fr'];
-  constructor(private translateService: TranslateService) {
-    this.translateService.addLangs(this.supportLanguages);
-    this.translateService.setDefaultLang('en');
-    const browserlang = this.translateService.getBrowserLang();
-    if (this.supportLanguages.includes(browserlang)) {
-      this.translateService.use(browserlang);
-      this.LanguageValue = browserlang;
-    }
+
+  constructor() {
+
   }
 
   ngOnInit(): void {
 
   }
 
-  MatSelectLanguage() {
-    this.translateService.use(this.LanguageValue);
-  }
 
-  DialogSelectLanguage(_lang: string) {
-    this.LanguageValue = _lang;
-    this.translateService.use(this.LanguageValue);
-    this.LanguageSelectionDialog = false;
-  }
 }
