@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CantactFormRoutingModule } from './contact-form-routing.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -26,7 +26,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HttpErrorComponent } from './components/http-error/http-error.component';
 import { DialogModule } from 'primeng/dialog';
-
+import { TranslateModule, TranslateLoader, TranslateService } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { MatSelectModule } from '@angular/material/select';
+import { ButtonModule } from 'primeng/button';
 @NgModule({
   declarations: [
     ApproveDeclinePatientComponent,
@@ -49,7 +52,14 @@ import { DialogModule } from 'primeng/dialog';
     MatInputModule, MatAutocompleteModule,
     HttpClientModule, MatBottomSheetModule, MatListModule,
     MatDialogModule, FormsModule, MatProgressBarModule, MatProgressSpinnerModule,
-    MatSlideToggleModule, FormsModule, ToastModule, ProgressSpinnerModule, DialogModule
+    MatSlideToggleModule, FormsModule, ToastModule, ProgressSpinnerModule, DialogModule, MatSelectModule, ButtonModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (http: HttpClient) => { return new TranslateHttpLoader(http, './assets/i18n/', '.json'); },
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

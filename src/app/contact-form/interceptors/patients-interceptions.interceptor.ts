@@ -24,6 +24,7 @@ export class PatientsInterceptionsInterceptor implements HttpInterceptor {
     'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws',
     'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws',
     'https://api.email-validator.net/api/verify',
+    './assets/i18n/en.json',
     this.Url + '/login/doctors'
   ];
   constructor(private router: Router, private http: HttpClient, private serv: PatientService) { }
@@ -31,10 +32,8 @@ export class PatientsInterceptionsInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let url: string = this.Url + '/login/doctors';
     if (this.nonInterceptedRequests.includes(request.url)) {
-      console.log('not intercepting ' + request.url);
       return next.handle(request);
     } else {
-      console.log('intercepting ' + request.url);
       if (request.url == url) {
         return next.handle(request).pipe(
           retry(1),

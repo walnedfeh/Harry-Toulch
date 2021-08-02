@@ -1,0 +1,32 @@
+{
+    "patientform": {
+        "formfields": {
+            "fieldslables": {
+                "firstName": "Prénom",
+                "lastName": "Nom de famille",
+                "birthDate": "Date de naissance",
+                "email": "Email",
+                "cell": "téléphone portable",
+                "phone": "téléphone résidentiel",
+                "healthCard": "Carte de santé",
+                "insuranceCompany": "Compagnie d'assurance",
+                "manualAddressSelect": "Je souhaite saisir mon adresse manuellement",
+                "canadaAdressCompleteControl": "Adresse",
+                "manualAddressText": "Adresse",
+                "streetName": "Nom de rue",
+                "buildingNum": "Numéro du bâtiment",
+                "subBuilding": "Numéro d'appartement",
+                "city": "Ville",
+                "province": "Province",
+                "postalCode": "code postal",
+                "country": "De campagne"
+            },
+            "fieldslablesextras": {
+                "required": "obligatoire",
+                "optional": "optionnel"
+            },
+            "fieldsvalidationerrors": {}
+        },
+        "submitbutton": "Envoyer"
+    }
+}

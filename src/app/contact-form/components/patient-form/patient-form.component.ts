@@ -46,20 +46,20 @@ export class PatientFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' },
-    { paramName: 'lastName', paramValue: 'Dummar' }]).pipe(tap({
-      next: (x) => {
-        console.log('tap success', x);
-        //this.isLoading = false;
-      },
-      error: (err) => {
-        console.log('tap error', err);
-        //  this.isLoading = false;
-      },
-      complete: () => { this.messageService.add({ severity: 'info', summary: 'Valid', detail: ' is valid' }); }
-    })).subscribe(x => {
-      console.log(x);
-    });
+    // this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' },
+    // { paramName: 'lastName', paramValue: 'Dummar' }]).pipe(tap({
+    //   next: (x) => {
+    //     console.log('tap success', x);
+    //     //this.isLoading = false;
+    //   },
+    //   error: (err) => {
+    //     console.log('tap error', err);
+    //     //  this.isLoading = false;
+    //   },
+    //   complete: () => { this.messageService.add({ severity: 'info', summary: 'Valid', detail: ' is valid' }); }
+    // })).subscribe(x => {
+    //   console.log(x);
+    // });
 
     this.canadaAdressCompleteControl.setValidators(Validators.required);
     this.PatientForm = this.fb.group({
@@ -157,10 +157,12 @@ export class PatientFormComponent implements OnInit {
               } else {
                 this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
               }
-              console.log(p);
+
               if (MatchedzCodes.length > 0) {
                 p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
               }
+              console.log(p);
+
               this.pserv.sendEmail(p).subscribe(b => {
                 console.log(b);
                 this.patientFormSpinnerEnabled = false;
@@ -182,6 +184,7 @@ export class PatientFormComponent implements OnInit {
             if (MatchedzCodes.length > 0) {
               p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
             }
+            console.log(p);
             this.pserv.sendEmail(p).subscribe(b => {
               console.log(b);
               this.patientFormSpinnerEnabled = false;

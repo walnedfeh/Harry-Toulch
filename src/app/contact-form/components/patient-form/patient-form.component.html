@@ -10,25 +10,34 @@
             <form [formGroup]="PatientForm" (ngSubmit)="onPatientFormSubmit($event)">
                 <div class="row">
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>First Name <small>(required)</small></mat-label>
+                        <!-- <mat-label>First Name <small>(required)</small></mat-label> -->
+                        <mat-label>{{'patientform.formfields.fieldslables.firstName'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="firstName" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.firstName.errors?.required">Firstname is required
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Last Name <small>(required)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.lastName'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="lastName" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.lastName.errors?.required">Lastname is required
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Birthdate <small>(required)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.birthDate'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="date" formControlName="birthDate" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.birthDate.errors?.required">Birthdate is required
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Email <small>(required)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.email'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="email" formControlName="email" matInput placeholder="example@example.example">
                         <mat-error *ngIf="PatientFormSubmitted && f.email.errors?.required">E-mail is required
                         </mat-error>
@@ -36,7 +45,9 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Cell Phone Number<small>(required)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.cell'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <app-tel-input formControlName="cell"></app-tel-input>
                         <!-- <mat-hint>Include area code</mat-hint> -->
                         <mat-error *ngIf="PatientFormSubmitted && f.cell.errors?.invalidCell">Please enter a valid cell
@@ -44,25 +55,33 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Home Phone Number <small>(optional)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.phone'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
+                        </mat-label>
                         <app-tel-input formControlName="phone"></app-tel-input>
                         <mat-hint>Include area code</mat-hint>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Health Card <small>(optional)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.healthCard'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="healthCard" matInput>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
-                        <mat-label>Insurance Company <small>(optional)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.insuranceCompany'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="insuranceCompany" matInput>
                     </mat-form-field>
                     <div class="pt-4">
                         <mat-slide-toggle [color]="'primary'" formControlName="manualAddressSelect">
-                            I would like to enter my address manually.
+                            {{'patientform.formfields.fieldslables.manualAddressSelect'| translate}}
                         </mat-slide-toggle>
                     </div>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="CanadaPostInputEnabled">
-                        <mat-label>Address <small>(required)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.canadaAdressCompleteControl'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" [formControl]="canadaAdressCompleteControl" matInput
                             [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="GetItemDetails($event.option.value)"
@@ -77,7 +96,9 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="!CanadaPostInputEnabled">
-                        <mat-label>Address <small>(required)</small></mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.manualAddressText'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="manualAddressText" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.manualAddressText.errors?.required">Address is
                             required
@@ -85,13 +106,17 @@
                     </mat-form-field>
 
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>Street Name <small>(required)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.streetName'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="streetName" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.streetName.errors?.required">Street Name is required
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>Building Number <small>(required)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.buildingNum'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="buildingNum" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.buildingNum.errors?.required">Building Number is
                             required
@@ -102,32 +127,42 @@
                         <input type="text" formControlName="BuildingName" matInput>
                     </mat-form-field> -->
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>Apartment Number<small>(optional)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.subBuilding'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="subBuilding" matInput>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>City <small>(required)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.city'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="city" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.city.errors?.required">City is
                             required
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>Province <small>(required)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.province'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="province" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.province.errors?.required">Province is
                             required
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>PostalCode <small>(required)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.postalCode'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="postalCode" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.postalCode.errors?.required">PostalCode is
                             required
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="AddressFieldsEnabled">
-                        <mat-label>Country <small>(required)</small> </mat-label>
+                        <mat-label>{{'patientform.formfields.fieldslables.country'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
                         <input type="text" formControlName="country" matInput>
                         <mat-error *ngIf="PatientFormSubmitted && f.postalCode.errors?.required">Country is
                             required
@@ -136,7 +171,8 @@
                 </div>
                 <div class="row">
                     <div class="d-flex justify-content-center">
-                        <button mat-flat-button color="primary" style="width: 150px;" type="submit">Submit</button>
+                        <button mat-flat-button color="primary" style="width: 150px;"
+                            type="submit">{{'patientform.submitbutton'|translate}}</button>
                     </div>
                 </div>
                 <div class="row" *ngIf="patientFormSpinnerEnabled">
