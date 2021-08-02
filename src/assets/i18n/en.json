@@ -4,12 +4,12 @@
             "fieldslables": {
                 "firstName": "First Name",
                 "lastName": "Last Name",
-                "birthDate": "Birthdate",
+                "birthDate": "Date of Birth",
                 "email": "Email",
-                "cell": "Cell Phone Number",
-                "phone": "Home Phone Number",
-                "healthCard": "Health Card",
-                "insuranceCompany": "Insurance Company",
+                "cell": "Cell Phone",
+                "phone": "Home Phone",
+                "healthCard": "Health Card (applicable for eye exams only)",
+                "insuranceCompany": "Insurance company (if applicable)",
                 "manualAddressSelect": "I would like to enter my address manually",
                 "canadaAdressCompleteControl": "Address",
                 "manualAddressText": "Address",
@@ -18,7 +18,7 @@
                 "subBuilding": "Apartment Number",
                 "city": "City",
                 "province": "Province",
-                "postalCode": "PostalCode",
+                "postalCode": "Postal Code",
                 "country": "Country"
             },
             "fieldslablesextras": {
@@ -27,6 +27,6 @@
             },
             "fieldsvalidationerrors": {}
         },
-        "submitbutton": "Submit"
+        "submitbutton": "Confirm & Submit"
     }
 }
