@@ -3,30 +3,30 @@
         "formfields": {
             "fieldslables": {
                 "firstName": "Prénom",
-                "lastName": "Nom de famille",
+                "lastName": "Nom",
                 "birthDate": "Date de naissance",
-                "email": "Email",
-                "cell": "téléphone portable",
-                "phone": "téléphone résidentiel",
-                "healthCard": "Carte de santé",
+                "email": "Courriel",
+                "cell": "Téléphone portable",
+                "phone": "Téléphone à la maison",
+                "healthCard": "Numéro d'assurance maladie (pour les examen de la vue seulement)",
                 "insuranceCompany": "Compagnie d'assurance",
                 "manualAddressSelect": "Je souhaite saisir mon adresse manuellement",
                 "canadaAdressCompleteControl": "Adresse",
                 "manualAddressText": "Adresse",
-                "streetName": "Nom de rue",
+                "streetName": "Nom de la rue",
                 "buildingNum": "Numéro du bâtiment",
                 "subBuilding": "Numéro d'appartement",
                 "city": "Ville",
                 "province": "Province",
-                "postalCode": "code postal",
-                "country": "De campagne"
+                "postalCode": "Code postal",
+                "country": "Pays"
             },
             "fieldslablesextras": {
-                "required": "obligatoire",
-                "optional": "optionnel"
+                "required": "requis",
+                "optional": "optionel"
             },
             "fieldsvalidationerrors": {}
         },
-        "submitbutton": "Envoyer"
+        "submitbutton": "Confirmer & Soumettre"
     }
 }
