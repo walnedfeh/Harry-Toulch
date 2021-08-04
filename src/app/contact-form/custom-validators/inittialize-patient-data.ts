@@ -21,6 +21,8 @@ export function InitializePatientData(p: Patientdata): AddPatientRequest {
     if (p.healthCard) {
         result.medicalCardExp = p.healthCard;
     }
+    result.isDefaultSms = p.preferedContact == 'SMS' ? true : false;
+    result.isDefaultEmail = !result.isDefaultSms;
     result.postalCode = p.PostalCode;
     result.streetNumber = p.BuildingNum;
     result.unit = p.SubBuilding;

@@ -19,7 +19,8 @@
                 "city": "City",
                 "province": "Province",
                 "postalCode": "Postal Code",
-                "country": "Country"
+                "country": "Country",
+                "preferedContact": "Preferred communication way"
             },
             "fieldslablesextras": {
                 "required": "required",

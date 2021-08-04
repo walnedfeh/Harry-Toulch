@@ -19,6 +19,8 @@ export class Patientdata {
     SubBuilding!: string;
     isValidEmail!: boolean;
     zCodes: ZCodeMatchApi[] = [];
+    preferedContact!: string;
+    manualAddressSelect!: boolean;
     constructor() {
     }
 }

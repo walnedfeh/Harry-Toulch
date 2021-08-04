@@ -1,4 +1,102 @@
 <div class="container pt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-center" style="font-size: large;">
+            <strong>Push Patient</strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-4 col-xs-3 p-2">
+                    <p style="font-size: initial;">
+                        Do you want to push the current patient to the database ?
+                    </p>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-4 col-xs-3 p-2">
+                    <div class="d-flex justify-content-left">
+                        <button class="btn btn-primary" style="width: 150px;" type="button"
+                            (click)="ApprovePatient()">Approve</button>
+                        <button mat-flat-button style="width: 150px;" type="button"
+                            (click)="ResetPatientForm()">Decline</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" *ngIf="PushPatientSpinnerEnabled">
+                <div class="d-flex justify-content-left">
+                    <p-progressSpinner [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner"
+                        strokeWidth="5" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<p-dialog header="Login" [(visible)]="LoginFormEnabled" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false" [position]="'top'" [closable]="true">
+    <p>Please enter username and password!</p>
+    <form [formGroup]="LoginForm" (ngSubmit)="onLoginFormSubmitted($event)">
+        <div class="row">
+            <div class="d-flex  flex-column">
+                <div class="p-2  d-flex justify-content-center">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Username</mat-label>
+                        <input matInput type="text" formControlName="userName">
+                        <button *ngIf="LoginForm.get('userName')?.value" matSuffix mat-icon-button aria-label="Clear"
+                            (click)="f.userName.setValue('')">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                        <mat-error *ngIf="LoginFormSubmitted && f.userName.errors?.required">Username is
+                            required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="p-2  d-flex justify-content-center">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="password">
+                        <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
+                            <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="LoginFormSubmitted && f.password.errors?.required">Password is
+                            required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="LoginErrorEnabled">Invalid username or password.
+                    </mat-error>
+                </div>
+                <div class="p-2  d-flex justify-content-center">
+                    <button mat-flat-button color="primary" style="width: 150px;" type="submit">Login</button>
+                    <button mat-flat-button style="width: 150px;" type="button"
+                        (click)="ResetPatientForm()">reset</button>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="LoginSpinnerEnabled">
+            <div class="d-flex justify-content-center">
+                <p-progressSpinner [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner" strokeWidth="5"
+                    fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+
+<p-dialog header="{{NotAuthorozedDialogHeader}}" [(visible)]="NotAuthorozedDialogEnabled" [modal]="true"
+    [style]="{width: '50vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false" [position]="'top'"
+    [closable]="false">
+    <p style="text-align: center;"><strong>{{ErrorMessage}}</strong></p>
+</p-dialog>
+
+<p-toast></p-toast>
+
+
+<!-- <div class="container pt-4">
     <mat-card>
         <mat-card-content>
             <div class="row">
@@ -31,10 +129,12 @@
         </mat-card-content>
 
     </mat-card>
-</div>
+</div> -->
 
 
-<p-dialog header="Login" [(visible)]="LoginFormEnabled" [modal]="true" [style]="{width: '75vw'}" [baseZIndex]="10000"
+
+<!-- 
+<p-dialog header="Login" [(visible)]="LoginFormEnabled" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
     [draggable]="false" [resizable]="false" [position]="'top'" [closable]="true">
     <p>Please enter username and password!</p>
     <form [formGroup]="LoginForm" (ngSubmit)="onLoginFormSubmitted($event)">
@@ -83,10 +183,4 @@
             </div>
         </div>
     </form>
-</p-dialog>
-
-
-<p-dialog header="{{NotAuthorozedDialogHeader}}" [(visible)]="NotAuthorozedDialogEnabled" [modal]="true" [style]="{width: '30vw'}"
-    [baseZIndex]="10000" [draggable]="false" [resizable]="false" [position]="'top'" [closable]="false">
-    <p><strong>{{ErrorMessage}}</strong></p>
-</p-dialog>
+</p-dialog> -->

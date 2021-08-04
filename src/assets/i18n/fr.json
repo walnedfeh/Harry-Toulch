@@ -19,7 +19,8 @@
                 "city": "Ville",
                 "province": "Province",
                 "postalCode": "Code postal",
-                "country": "Pays"
+                "country": "Pays",
+                "preferedContact": "Mode de communication préféré"
             },
             "fieldslablesextras": {
                 "required": "requis",

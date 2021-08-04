@@ -83,6 +83,22 @@
                         </mat-label>
                         <input type="text" formControlName="insuranceCompany" matInput>
                     </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2">
+                        <mat-label>{{'patientform.formfields.fieldslables.preferedContact'| translate}}
+                            <small>({{'patientform.formfields.fieldslablesextras.required'| translate}})</small>
+                        </mat-label>
+                        <mat-select formControlName="preferedContact">
+                            <mat-option [value]="'SMS'">
+                                SMS
+                            </mat-option>
+                            <mat-option [value]="'Email'">
+                                Email
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="PatientFormSubmitted && f.preferedContact.errors?.required">Preferred
+                            communication way is required
+                        </mat-error>
+                    </mat-form-field>
                     <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-2" *ngIf="CanadaPostInputEnabled"
                         appearance="outline">
                         <mat-label>{{'patientform.formfields.fieldslables.canadaAdressCompleteControl'| translate}}
@@ -99,7 +115,7 @@
                         <mat-error *ngIf="PatientFormSubmitted && canadaAdressCompleteControl.hasError('required')">
                             Address is
                             required
-                        </mat-error> 
+                        </mat-error>
                     </mat-form-field>
                     <div class="pt-4">
                         <mat-slide-toggle [color]="'primary'" formControlName="manualAddressSelect">

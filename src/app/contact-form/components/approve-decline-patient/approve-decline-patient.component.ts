@@ -63,6 +63,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         p.Country = params.get('Country') || 'n/a';
         p.BuildingNum = params.get('BuildingNum') || 'n/a';
         p.SubBuilding = params.get('SubBuilding') || 'n/a';
+        p.preferedContact = params.get('preferedContact') || 'n/a';
         return p;
       })
     );
@@ -76,10 +77,21 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
       console.log(x);
 
       if (this.SecurityParam == '4545') {
-        if (x.firstName != 'n/a' && x.lastName != 'n/a' && x.birthDate != 'n/a' &&
-          x.email != 'n/a' && x.cell != 'n/a'
-          && x.fullAddress != 'n/a' && x.streetName != 'n/a' && x.City != 'n/a' && x.Province != 'n/a' &&
-          x.PostalCode != 'n/a' && x.Country != 'n/a' && x.BuildingNum != 'n/a' && x.SubBuilding != 'n/a' && this.SecurityParam == '4545') {
+        if (x.firstName != 'n/a' &&
+          x.lastName != 'n/a' &&
+          x.birthDate != 'n/a' &&
+          x.email != 'n/a' &&
+          x.cell != 'n/a' &&
+          x.fullAddress != 'n/a' &&
+          x.streetName != 'n/a' &&
+          x.City != 'n/a' &&
+          x.Province != 'n/a' &&
+          x.preferedContact != 'n/a' &&
+          x.PostalCode != 'n/a' &&
+          x.Country != 'n/a' &&
+          x.BuildingNum != 'n/a' &&
+          x.SubBuilding != 'n/a' &&
+          this.SecurityParam == '4545') {
           this.AllFieldsExists = true;
           this.PatientData = x;
         } else {
