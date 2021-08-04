@@ -1,67 +1,32 @@
-<div class="container">
+<div class="container mt-20">
     <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <br>
-    </div>
-    <div class="row">
-        <div class="col-sm-3">
-
+        <div class="d-flex  flex-column">
+            <div class="p-2  d-flex justify-content-center">
+                <h1><strong>Harry Toulch Registeration</strong></h1>
+            </div>
+            <div class="p-2 d-flex justify-content-center">
+                <h1>500</h1>
+            </div>
+            <div class="p-2 d-flex justify-content-center">
+                <h1>Internal Server Error</h1>
+            </div>
+            <div class="p-2 d-flex justify-content-center">
+                <p>{{errorMessage}}</p>
+            </div>
         </div>
-        <div class="col-sm-6 text-center">
-            <h1><strong>Eyemax Optical Studio</strong></h1><br>
-            <h3><strong>500</strong></h3>
-            <p>Internal Server Error</p>
-            <p>{{errorMessage}}</p>
-        </div>
-        <div class="col-sm-3">
-
-        </div>
-
     </div>
     <div class="row">
-        <div class="col-sm-3">
-
+        <div class="d-flex  flex-column">
+            <div class="p-2 d-flex justify-content-center">
+                <a [routerLink]="['/contact-form/patient-form']" routerLinkActive="router-link-active"
+                    class="btn btn btn-info" role="button" aria-pressed="true" style="border-radius: 30px;">Check my
+                    Info
+                </a>
+            </div>
+            <div class="p-2 d-flex justify-content-center">
+                <a href="https://www.harrytoulch.com" class="btn  btn-primary" role="button" aria-pressed="true"
+                    style="background-color: blue ;border-radius: 30px;" target="_blank">Harry Toulch Home Page</a>
+            </div>
         </div>
-        <div class="col-sm-6 text-center">
-            <a [routerLink]="['/appointment/covid19']" routerLinkActive="router-link-active" class="btn btn btn-info"
-                role="button" aria-pressed="true" style="border-radius: 30px;">Book
-                Appointment</a><br>
-            <a href="https://www.eyemaxx.ca" class="btn   btn-primary" role="button" aria-pressed="true"
-                style="background-color: blue ;border-radius: 30px;" target="_blank">Home Page</a>
-
-        </div>
-        <div class="col-sm-3">
-
-        </div>
-
-    </div>
-    <div class="row">
-        <br>
     </div>
 </div>

@@ -25,7 +25,7 @@ export class PatientsInterceptionsInterceptor implements HttpInterceptor {
     'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws',
     'https://api.email-validator.net/api/verify',
     './assets/i18n/en.json',
-    this.Url + '/login/doctors'
+   // this.Url + '/login/doctors'
   ];
   constructor(private router: Router, private http: HttpClient, private serv: PatientService) { }
 
@@ -75,7 +75,9 @@ export class PatientsInterceptionsInterceptor implements HttpInterceptor {
                 "error": errorMessage,
               }
             };
-            this.router.navigate(['/error',], params);
+            console.log('navigating');
+
+            this.router.navigate(['error'], params);
             return throwError(errorMessage);
           })
         );;
@@ -132,7 +134,9 @@ export class PatientsInterceptionsInterceptor implements HttpInterceptor {
                   "error": errorMessage,
                 }
               };
-              this.router.navigate(['/error',], params);
+              console.log('navigating');
+
+              this.router.navigate(['error',], params);
               return throwError(errorMessage);
             })
           );

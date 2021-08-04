@@ -54,7 +54,7 @@ export class PatientFormComponent implements OnInit {
     }
   }
   //language events
-  
+
   MatSelectLanguage() {
     this.translateService.use(this.LanguageValue);
   }
@@ -73,20 +73,20 @@ export class PatientFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' },
-    // { paramName: 'lastName', paramValue: 'Dummar' }]).pipe(tap({
-    //   next: (x) => {
-    //     console.log('tap success', x);
-    //     //this.isLoading = false;
-    //   },
-    //   error: (err) => {
-    //     console.log('tap error', err);
-    //     //  this.isLoading = false;
-    //   },
-    //   complete: () => { this.messageService.add({ severity: 'info', summary: 'Valid', detail: ' is valid' }); }
-    // })).subscribe(x => {
-    //   console.log(x);
-    // });
+    this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' },
+    { paramName: 'lastName', paramValue: 'Dummar' }]).pipe(tap({
+      next: (x) => {
+        console.log('tap success', x);
+        //this.isLoading = false;
+      },
+      error: (err) => {
+        console.log('tap error', err);
+        //  this.isLoading = false;
+      },
+      complete: () => { this.messageService.add({ severity: 'info', summary: 'Valid', detail: ' is valid' }); }
+    })).subscribe(x => {
+      console.log(x);
+    });
 
     this.canadaAdressCompleteControl.setValidators(Validators.required);
     this.PatientForm = this.fb.group({
