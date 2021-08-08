@@ -20,7 +20,9 @@
                 "province": "Province",
                 "postalCode": "Postal Code",
                 "country": "Country",
-                "preferedContact": "Preferred communication way"
+                "preferedContact": "Preferred communication way",
+                "firstVisitOption": "This is my first visit at Harry Toulch Optometrist",
+                "disclaimer": " I certify that all the information in this form is correct and allow Harry Toulch to use that information for record keeping and profile creation."
             },
             "fieldslablesextras": {
                 "required": "required",

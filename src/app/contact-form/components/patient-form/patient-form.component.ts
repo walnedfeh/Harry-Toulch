@@ -107,7 +107,9 @@ export class PatientFormComponent implements OnInit {
       subBuilding: ['',],
       manualAddressSelect: [false,],
       manualAddressText: ['', Validators.required],
-      preferedContact: ['', Validators.required]
+      preferedContact: ['', Validators.required],
+      firstVisitOption: [false,],
+      disclaimer: [false, Validators.requiredTrue]
     });
 
     this.filteredOptions = this.canadaAdressCompleteControl.valueChanges.pipe(

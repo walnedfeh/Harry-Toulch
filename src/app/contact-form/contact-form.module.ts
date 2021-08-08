@@ -30,6 +30,8 @@ import { TranslateModule, TranslateLoader, TranslateService } from "@ngx-transla
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { MatSelectModule } from '@angular/material/select';
 import { ButtonModule } from 'primeng/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 @NgModule({
   declarations: [
     ApproveDeclinePatientComponent,
@@ -52,7 +54,8 @@ import { ButtonModule } from 'primeng/button';
     MatInputModule, MatAutocompleteModule,
     HttpClientModule, MatBottomSheetModule, MatListModule,
     MatDialogModule, FormsModule, MatProgressBarModule, MatProgressSpinnerModule,
-    MatSlideToggleModule, FormsModule, ToastModule, ProgressSpinnerModule, DialogModule, MatSelectModule, ButtonModule,
+    MatSlideToggleModule, FormsModule, ToastModule, ProgressSpinnerModule,
+    DialogModule, MatSelectModule, ButtonModule, MatCheckboxModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

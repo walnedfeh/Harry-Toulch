@@ -21,6 +21,7 @@ export class Patientdata {
     zCodes: ZCodeMatchApi[] = [];
     preferedContact!: string;
     manualAddressSelect!: boolean;
+    firstVisitOption!: boolean;
     constructor() {
     }
 }
