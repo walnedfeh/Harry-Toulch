@@ -11,12 +11,12 @@ export class Patientdata {
     streetName!: string;
     healthCard!: string;
     insuranceCompany!: string;
-    City!: string;
-    Province!: string;
-    PostalCode!: string;
-    Country!: string;
-    BuildingNum!: string;
-    SubBuilding!: string;
+    city!: string;
+    province!: string;
+    postalCode!: string;
+    country!: string;
+    buildingNum!: string;
+    subBuilding!: string;
     isValidEmail!: boolean;
     zCodes: ZCodeMatchApi[] = [];
     preferedContact!: string;

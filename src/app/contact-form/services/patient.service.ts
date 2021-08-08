@@ -100,11 +100,12 @@ export class PatientService {
 
   /*first and last name services */
 
-  getPatientListByFirstLastName(paramsArr: Param[]): Observable<Patient[]> {
-    let params: HttpParams = new HttpParams().set('match', 'any').set('email', 'a@a.a');
-    paramsArr.forEach(x => {
-      params = params.set(x.paramName, x.paramValue);
-    });
+  getPatientListByFirstLastName(_firstName: string, _lastName: string): Observable<Patient[]> {
+    let params: HttpParams = new HttpParams()
+      .set('firstName', _firstName)
+      .set('lastName', _lastName)
+      .set('match', 'all');
+
     return this.http.get<Patient[]>(this.ApiUrl + '/Patient/list', { params }).pipe(
       map((data: any) => {
         let tempData = data["patientList"];
@@ -119,8 +120,8 @@ export class PatientService {
     );
   }
 
-  getPatientListByFirstLastNamezCodesArr(paramsArr: Param[]): Observable<string[]> {
-    return this.getPatientListByFirstLastName(paramsArr).pipe(
+  getPatientListByFirstLastNamezCodesArr(_firstName: string, _lastName: string): Observable<string[]> {
+    return this.getPatientListByFirstLastName(_firstName, _lastName).pipe(
       map((data: Patient[]) => {
         let result: string[] = [];
         data.forEach(x => {
@@ -131,8 +132,19 @@ export class PatientService {
     );
   }
 
-  getPatientListByFirstLastNamezCodesStr(paramsArr: Param[]): Observable<string> {
-    return this.getPatientListByFirstLastNamezCodesArr(paramsArr).pipe(
+  getPatientListByFirstLastNameZcodesMatch(_firstName: string, _lastName: string, _formattedParamName: string): Observable<ZCodeMatch> {
+    return this.getPatientListByFirstLastNamezCodesArr(_firstName, _lastName).pipe(map((data: string[]) => {
+      let zcmS: ZCodeMatch = new ZCodeMatch();
+      data.forEach(x => {
+        zcmS.zCodes.push('z' + x.split('-')[1]);
+      });
+      zcmS.MatchedField = _formattedParamName;
+      return zcmS;
+    }));
+  }
+
+  getPatientListByFirstLastNamezCodesStr(_firstName: string, _lastName: string): Observable<string> {
+    return this.getPatientListByFirstLastNamezCodesArr(_firstName, _lastName).pipe(
       map((data: string[]) => {
         return data.map(x => {
           let temp = x.split('-')[1];
@@ -142,6 +154,7 @@ export class PatientService {
     );
   }
 
+  /*Harru Toulch Security Login*/
   harryToulchLogin(_userName: string, _password: string, _body: LoginBody): Observable<string> {
     const options = {
       headers: new HttpHeaders({
@@ -157,5 +170,3 @@ export class PatientService {
   }
 }
 
-
-/* "id": "patient-25406", */

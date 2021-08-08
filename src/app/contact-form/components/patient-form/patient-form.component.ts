@@ -73,20 +73,6 @@ export class PatientFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.pserv.getPatientListByFirstLastName([{ paramName: 'firstName', paramValue: 'Carlo' },
-    { paramName: 'lastName', paramValue: 'Dummar' }]).pipe(tap({
-      next: (x) => {
-        console.log('tap success', x);
-        //this.isLoading = false;
-      },
-      error: (err) => {
-        console.log('tap error', err);
-        //  this.isLoading = false;
-      },
-      complete: () => { this.messageService.add({ severity: 'info', summary: 'Valid', detail: ' is valid' }); }
-    })).subscribe(x => {
-      console.log(x);
-    });
 
     this.canadaAdressCompleteControl.setValidators(Validators.required);
     this.PatientForm = this.fb.group({
@@ -173,13 +159,37 @@ export class PatientFormComponent implements OnInit {
     }
     p.fullAddress = this.canadaAdressCompleteControl.value.Text;
     let MatchedzCodes: ZCodeMatch[] = [];
-    this.pserv.getParamZcodesMatch('email', p.email, 'E-mail').subscribe(x => {
-      MatchedzCodes.push(x);
-      this.pserv.getParamZcodesMatch('mobile', p.cell, 'Cell').subscribe(y => {
-        MatchedzCodes.push(y);
-        if (phoneExists) {
-          this.pserv.getParamZcodesMatch('home', p.phone, 'Home').subscribe(z => {
-            MatchedzCodes.push(z);
+    this.pserv.getPatientListByFirstLastNameZcodesMatch(p.firstName, p.lastName, 'First & Last Name').subscribe(u => {
+      MatchedzCodes.push(u);
+      this.pserv.getParamZcodesMatch('email', p.email, 'E-mail').subscribe(x => {
+        MatchedzCodes.push(x);
+        this.pserv.getParamZcodesMatch('mobile', p.cell, 'Cell').subscribe(y => {
+          MatchedzCodes.push(y);
+          if (phoneExists) {
+            this.pserv.getParamZcodesMatch('home', p.phone, 'Home').subscribe(z => {
+              MatchedzCodes.push(z);
+              this.serv.VerifyEmailBool(p.email).subscribe(a => {
+                p.isValidEmail = a;
+                if (a) {
+                  this.messageService.add({ severity: 'success', summary: 'Valid', detail: p.email + ' is valid' });
+                } else {
+                  this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
+                }
+
+                if (MatchedzCodes.length > 0) {
+                  p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
+                }
+                console.log(p);
+                this.pserv.sendEmail(p).subscribe(b => {
+                  console.log(b);
+                  this.patientFormSpinnerEnabled = false;
+                }, error => {
+                  this.patientFormSpinnerEnabled = false;
+                });
+              });
+            });
+          }
+          else {
             this.serv.VerifyEmailBool(p.email).subscribe(a => {
               p.isValidEmail = a;
               if (a) {
@@ -187,12 +197,11 @@ export class PatientFormComponent implements OnInit {
               } else {
                 this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
               }
-
+              console.log(p);
               if (MatchedzCodes.length > 0) {
                 p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
               }
               console.log(p);
-
               this.pserv.sendEmail(p).subscribe(b => {
                 console.log(b);
                 this.patientFormSpinnerEnabled = false;
@@ -200,32 +209,12 @@ export class PatientFormComponent implements OnInit {
                 this.patientFormSpinnerEnabled = false;
               });
             });
-          });
-        }
-        else {
-          this.serv.VerifyEmailBool(p.email).subscribe(a => {
-            p.isValidEmail = a;
-            if (a) {
-              this.messageService.add({ severity: 'success', summary: 'Valid', detail: p.email + ' is valid' });
-            } else {
-              this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
-            }
-            console.log(p);
-            if (MatchedzCodes.length > 0) {
-              p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
-            }
-            console.log(p);
-            this.pserv.sendEmail(p).subscribe(b => {
-              console.log(b);
-              this.patientFormSpinnerEnabled = false;
-            }, error => {
-              this.patientFormSpinnerEnabled = false;
-            });
-          });
-        }
+          }
 
+        });
       });
     });
+
 
 
 

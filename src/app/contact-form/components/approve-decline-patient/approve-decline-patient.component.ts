@@ -57,12 +57,12 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         p.streetName = params.get('streetName') || 'n/a';
         p.healthCard = params.get('healthCard') || 'n/a';
         p.insuranceCompany = params.get('insuranceCompany') || 'n/a';
-        p.City = params.get('City') || 'n/a';
-        p.Province = params.get('Province') || 'n/a';
-        p.PostalCode = params.get('PostalCode') || 'n/a';
-        p.Country = params.get('Country') || 'n/a';
-        p.BuildingNum = params.get('BuildingNum') || 'n/a';
-        p.SubBuilding = params.get('SubBuilding') || 'n/a';
+        p.city = params.get('city') || 'n/a';
+        p.province = params.get('province') || 'n/a';
+        p.postalCode = params.get('postalCode') || 'n/a';
+        p.country = params.get('country') || 'n/a';
+        p.buildingNum = params.get('buildingNum') || 'n/a';
+        p.subBuilding = params.get('subBuilding') || 'n/a';
         p.preferedContact = params.get('preferedContact') || 'n/a';
         return p;
       })
@@ -84,13 +84,13 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
           x.cell != 'n/a' &&
           x.fullAddress != 'n/a' &&
           x.streetName != 'n/a' &&
-          x.City != 'n/a' &&
-          x.Province != 'n/a' &&
+          x.city != 'n/a' &&
+          x.province != 'n/a' &&
           x.preferedContact != 'n/a' &&
-          x.PostalCode != 'n/a' &&
-          x.Country != 'n/a' &&
-          x.BuildingNum != 'n/a' &&
-          x.SubBuilding != 'n/a' &&
+          x.postalCode != 'n/a' &&
+          x.country != 'n/a' &&
+          x.buildingNum != 'n/a' &&
+          x.subBuilding != 'n/a' &&
           this.SecurityParam == '4545') {
           this.AllFieldsExists = true;
           this.PatientData = x;

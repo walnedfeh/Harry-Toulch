@@ -1,17 +1,42 @@
 <div class="container">
     <div class="d-flex flex-column">
         <div class="d-flex justify-content-center mt-5">
-            <img src="../../../../assets/harry-toulch-logo.png" alt="Harry-Toulch" style="width: 40%;height: 20%;">
-
+            <img src="../../../../assets/img/harry-toulch-logo.png" alt="Harry-Toulch" style="width: 40%;height: 20%;">
         </div>
         <div class="d-flex justify-content-center   ">
             <hr />
         </div>
 
         <div class="d-flex justify-content-center">
-            <p style="font-family:;">Online Patient Registeration</p>
+            <p style="font-family: PtSansBold;font-size: large;">Online Patient Registeration</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p style="font-family: PtSansReg;">Please complete the form below and submit yout
+                application</p>
         </div>
     </div>
 
     <router-outlet></router-outlet>
+
 </div>
+<br>
+<br>
+<footer class="footer">
+    <div class="container bottom_border mt-4">
+        <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center">
+                <p style="font-family: PtSansBold;font-size: x-large;color: black;">Harry Toulch Optomètristes</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p style="font-family: PtSansReg;text-align: center;font-size: initial;color: black;">
+                {{'patientform.footerText'|translate}}
+            </p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p style="font-family: PtSansReg;text-align: center;font-size: larger;color: black;">
+                Copyright © 2021 Harry Toulch Optomètristes, All reight reserved
+            </p>
+        </div>
+    </div>
+</footer>

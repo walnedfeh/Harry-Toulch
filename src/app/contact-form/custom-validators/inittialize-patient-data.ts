@@ -12,9 +12,9 @@ export function InitializePatientData(p: Patientdata): AddPatientRequest {
         result.phone = p.phone;
     }
     result.streetName = p.streetName;
-    result.city = p.City;
-    result.province = p.Province;
-    result.country = p.Country;
+    result.city = p.city;
+    result.province = p.province;
+    result.country = p.country;
     if (p.insuranceCompany) {
         result.medicalCard = p.insuranceCompany;
     }
@@ -23,9 +23,9 @@ export function InitializePatientData(p: Patientdata): AddPatientRequest {
     }
     result.isDefaultSms = p.preferedContact == 'SMS' ? true : false;
     result.isDefaultEmail = !result.isDefaultSms;
-    result.postalCode = p.PostalCode;
-    result.streetNumber = p.BuildingNum;
-    result.unit = p.SubBuilding;
+    result.postalCode = p.postalCode;
+    result.streetNumber = p.buildingNum;
+    result.unit = p.subBuilding;
     result.isDefaultSms = true;
     result.isDefaultEmail = false;
     return result;

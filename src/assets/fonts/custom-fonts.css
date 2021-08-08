@@ -1,0 +1,9 @@
+@font-face {
+    font-family: PtSansBold;
+    src: url("../fonts/PTSansBold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: PtSansReg;
+    src: url("../fonts/PTSansReg.ttf") format("truetype");
+}
