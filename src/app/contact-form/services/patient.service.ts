@@ -95,7 +95,7 @@ export class PatientService {
   }
 
   sendEmail(_body: Patientdata) {
-    return this.http.post('http://harrytoulchregistration.com/api/contact2.php', _body);
+    return this.http.post('https://harrytoulchregistration.com/api/contact2.php', _body);
   }
 
   /*first and last name services */

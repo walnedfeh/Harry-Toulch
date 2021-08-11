@@ -1,7 +1,7 @@
 import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { CanadaPostSuggestItem } from '../models/canada-post-suggest-item';
 import { CanadaPostSuggestItemDetails } from '../models/canada-post-suggest-item-details';
 import { EmailVerifierResponse } from '../models/email-verifier-response';
@@ -78,6 +78,10 @@ export class ThirdPartyServicesService {
     }));
   }
 
+
+  VerifyEmailBoolBlur(_email: string): Observable<boolean> {
+    return this.VerifyEmailBool(_email).pipe(delay(1000));
+  }
 
 
 

@@ -11,7 +11,6 @@ import { AddPatientRequest } from '../../models/add-patient-request';
 import { LoginBody } from '../../models/login-body';
 import { Patientdata } from '../../models/patientdata';
 import { PatientService } from '../../services/patient.service';
-import { DialogOverviewExampleDialog } from '../patient-form/patient-form.component';
 
 @Component({
   selector: 'app-approve-decline-patient',
@@ -67,7 +66,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         return p;
       })
     );
-
+/*preferedContact */
     this.LoginForm = this.fb.group({
       userName: ['', Validators.compose([Validators.required])],
       password: ['', Validators.compose([Validators.required])]
@@ -90,7 +89,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
           x.postalCode != 'n/a' &&
           x.country != 'n/a' &&
           x.buildingNum != 'n/a' &&
-          x.subBuilding != 'n/a' &&
+          x.preferedContact != 'n/a' &&
           this.SecurityParam == '4545') {
           this.AllFieldsExists = true;
           this.PatientData = x;

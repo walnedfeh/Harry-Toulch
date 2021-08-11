@@ -8,7 +8,7 @@
                 "email": "Email",
                 "cell": "Cell Phone",
                 "phone": "Home Phone",
-                "healthCard": "Health Card (applicable for eye exams only)",
+                "healthCard": "Health Card ",
                 "insuranceCompany": "Insurance company (if applicable)",
                 "manualAddressSelect": "I would like to enter my address manually",
                 "canadaAdressCompleteControl": "Address",
@@ -22,15 +22,36 @@
                 "country": "Country",
                 "preferedContact": "Preferred communication way",
                 "firstVisitOption": "This is my first visit at Harry Toulch Optometrist",
-                "disclaimer": " I certify that all the information in this form is correct and allow Harry Toulch to use that information for record keeping and profile creation."
+                "disclaimer": " I certify that all the information in this form is correct and allow Harry Toulch to use that information for record keeping and profile creation.",
+                "languageInput": "Select Language"
             },
             "fieldslablesextras": {
                 "required": "required",
                 "optional": "optional"
             },
-            "fieldsvalidationerrors": {}
+            "fieldsvalidationerrors": {
+                "errfirstName": "First Name is required",
+                "errlastName": "Last Name is required",
+                "errbirthDate": "Date of Birth is required",
+                "erremail": "Email is required",
+                "invemail": "Invalid Email format",
+                "errcell": "Please enter a valid cell phone number",
+                "hintareaCode": "Include area code",
+                "errPreferredContact": "Preferred communication way is required",
+                "errAddress": " Address is required",
+                "errBuildingNum": "Building Number is required",
+                "errStreetName": "Street Name is required",
+                "errCity": "City is required",
+                "errProvince": "Province is required",
+                "errPostalCode": "PostalCode is required",
+                "errCountry": "Country is required",
+                "errDisclaimer": "Please check the box to continue"
+            },
+            "cardHeader": "Patient information"
         },
         "submitbutton": "Confirm & Submit",
+        "HeaderPrimaryText": "Online Patient Registeration",
+        "HeaderSecondaryText": "Please complete the form below and submit your application",
         "footerText": " Established in 1958, Harry Toulch Optometrists is located in the heart of Montreal’s famous Le Plateau Mont Royal neighborhood. At the corner of Saint-Laurent and Des Pins is where generations of Montrealers have gone for eye exams and to update their look with a new pair of eyeglasses."
     }
 }

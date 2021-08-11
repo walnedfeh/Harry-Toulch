@@ -10,6 +10,7 @@ export function cellPhoneNumberValidator(): ValidatorFn {
         const SubsNumeric = /[0-9]+/.test(value?.subscriber);
         const cellValidFormat = areaNumeric && exNumeric && SubsNumeric;
         const cellNotRequired = value?.area.length == 3 && value?.exchange.length == 3 && value?.subscriber.length == 4;
+
         if (cellValidFormat && cellNotRequired) {
             return null;
         } else {

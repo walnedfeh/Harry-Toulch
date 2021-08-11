@@ -14,6 +14,7 @@ import { PatientService } from '../../services/patient.service';
 import { ThirdPartyServicesService } from '../../services/third-party-services-service';
 import { MyTel } from '../tel-input/tel-input.component';
 import { TranslateService } from '@ngx-translate/core';
+import { EmailAsyncValidator } from '../../custom-validators/async-validators';
 
 @Component({
   selector: 'app-patient-form',
@@ -33,18 +34,20 @@ export class PatientFormComponent implements OnInit {
   patientFormSpinnerEnabled: boolean = false;
   CanadaPostInputEnabled: boolean = true;
   InitialMobileNumbersValue: MyTel = new MyTel('', '', '');
-
+  manualAddressToggle: boolean = true;
   //language configuration
   LanguageValue: string = 'en';
   LanguageSelectionDialog: boolean = true;
   supportLanguages = ['en', 'fr'];
-
+  cellTouched: boolean = false;
+  paddingValue: string = '';
   constructor(private fb: FormBuilder,
     private serv: ThirdPartyServicesService,
     private dialog: MatDialog,
     private pserv: PatientService,
     private messageService: MessageService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private emailValidator: EmailAsyncValidator) {
     this.translateService.addLangs(this.supportLanguages);
     this.translateService.setDefaultLang('en');
     const browserlang = this.translateService.getBrowserLang();
@@ -52,6 +55,7 @@ export class PatientFormComponent implements OnInit {
       this.translateService.use(browserlang);
       this.LanguageValue = browserlang;
     }
+    this.paddingValue = window.innerWidth > 500 ? 'p-2' : '';
   }
   //language events
 
@@ -74,12 +78,13 @@ export class PatientFormComponent implements OnInit {
 
   ngOnInit(): void {
 
+
     this.canadaAdressCompleteControl.setValidators(Validators.required);
     this.PatientForm = this.fb.group({
       firstName: ['', Validators.compose([Validators.required])],
       lastName: ['', Validators.compose([Validators.required])],
       birthDate: ['', Validators.compose([Validators.required])],
-      email: ['', Validators.compose([Validators.required, Validators.email])],
+      email: new FormControl('', { updateOn: 'blur', validators: [Validators.required, Validators.email], asyncValidators: this.emailValidator.validate.bind(this) }),
       cell: new FormControl(this.InitialMobileNumbersValue, cellPhoneNumberValidator()),
       phone: new FormControl(this.InitialMobileNumbersValue,),
       streetName: ['', Validators.required],
@@ -98,6 +103,11 @@ export class PatientFormComponent implements OnInit {
       disclaimer: [false, Validators.requiredTrue]
     });
 
+    console.log(this.f.cell.touched);
+
+    this.PatientForm.get('email')?.valueChanges.subscribe(t => {
+      console.log(this.f.email.errors);
+    });
     this.filteredOptions = this.canadaAdressCompleteControl.valueChanges.pipe(
       startWith(''),
       debounceTime(400),
@@ -107,6 +117,10 @@ export class PatientFormComponent implements OnInit {
       })
     );
 
+    this.filteredOptions.subscribe(t => {
+
+
+    });
     this.PatientForm.get('manualAddressSelect')?.valueChanges.subscribe((t: boolean) => {
       this.PatientForm.controls.city.setValue('');
       this.PatientForm.controls.province.setValue('');
@@ -129,12 +143,12 @@ export class PatientFormComponent implements OnInit {
 
   onPatientFormSubmit = (e: any) => {
     this.PatientFormSubmitted = true;
+    this.cellTouched = true;
     if (this.PatientForm.get('manualAddressSelect')?.value == true) {
       this.canadaAdressCompleteControl.setValue(this.PatientForm.get('manualAddressText')?.value);
     } else {
       this.PatientForm.controls.manualAddressText.setValue(this.canadaAdressCompleteControl.value);
     }
-    console.log(this.PatientForm.controls);
 
     if (this.PatientForm.invalid) {
       e.preventDefault();
@@ -182,8 +196,10 @@ export class PatientFormComponent implements OnInit {
                 console.log(p);
                 this.pserv.sendEmail(p).subscribe(b => {
                   console.log(b);
+                  this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sended' });
                   this.patientFormSpinnerEnabled = false;
                 }, error => {
+                  this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
                   this.patientFormSpinnerEnabled = false;
                 });
               });
@@ -193,7 +209,7 @@ export class PatientFormComponent implements OnInit {
             this.serv.VerifyEmailBool(p.email).subscribe(a => {
               p.isValidEmail = a;
               if (a) {
-                this.messageService.add({ severity: 'success', summary: 'Valid', detail: p.email + ' is valid' });
+                this.messageService.add({ severity: 'info', summary: 'Valid', detail: p.email + ' is valid' });
               } else {
                 this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
               }
@@ -203,10 +219,11 @@ export class PatientFormComponent implements OnInit {
               }
               console.log(p);
               this.pserv.sendEmail(p).subscribe(b => {
-                console.log(b);
+                this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sended' });
                 this.patientFormSpinnerEnabled = false;
               }, error => {
                 this.patientFormSpinnerEnabled = false;
+                this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
               });
             });
           }
@@ -230,78 +247,70 @@ export class PatientFormComponent implements OnInit {
   //filter function will return an array depending on text condition 
   filter(val: string, LastId?: string): Observable<CanadaPostSuggestItem[]> {
     if (LastId != null) {
-      return this.serv.getCanadaPostSuggestedItems(val, 'CAN', 'EN', LastId)
-        .pipe(
-          map(response => response.filter(option => {
-            return option.Text.toLowerCase().indexOf(val.toString().toLowerCase()) === 0
-          }))
-        );
+      return this.serv.getCanadaPostSuggestedItems(val, 'CAN', 'EN', LastId);
     }
     else {
-      return this.serv.getCanadaPostSuggestedItems(val, 'CAN', 'EN')
-        .pipe(
-          map(response => response.filter(option => {
-            return option.Text.toLowerCase().indexOf(val.toString().toLowerCase()) === 0
-          }))
-        );
+      return this.serv.getCanadaPostSuggestedItems(val, 'CAN', 'EN');
+      //   return this.serv.getCanadaPostSuggestedItems(val, 'CAN', 'EN')
+      //     .pipe(
+      //       map(response => response.filter(option => {
+      //         return option.Text.toLowerCase().indexOf(val.toString().toLowerCase()) === 0
+      //       }))
+      //     );
     }
   }
 
   GetItemDetails(value: CanadaPostSuggestItem) {
-    console.log(value);
-    if (value.Next == 'Find') {
-      this.serv.getCanadaPostSuggestedItems(value.Text, 'CAN', 'EN', value.Id).subscribe(x => {
-        console.log(x);
+    if (value.Next != "") {
+      if (value.Next == 'Find') {
+        this.serv.getCanadaPostSuggestedItems(value.Text, 'CAN', 'EN', value.Id).subscribe(x => {
+          console.log(x);
 
-        const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-          width: '500px',
-          data: { SelectedOption: value, SubOptions: x }
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          console.log(result);
+          const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+            width: '500px',
+            data: { SelectedOption: value, SubOptions: x }
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log(result);
 
-          console.log('The dialog was closed');
-          this.serv.getCanadaPostItemDetails(result[0].Id).subscribe(res => {
-            let result: CanadaPostSuggestItemDetails = res[0];
-            this.AddressFieldsEnabled = true;
-            this.PatientForm.controls.city.setValue(result.City);
-            this.PatientForm.controls.crovince.setValue(result.Province);
-            this.PatientForm.controls.postalCode.setValue(result.PostalCode);
-            this.PatientForm.controls.country.setValue(result.CountryName);
-            this.PatientForm.controls.buildingNum.setValue(result.BuildingNumber);
-            this.PatientForm.controls.subBuilding.setValue(result.SubBuilding);
-            this.PatientForm.controls.streetName.setValue(result.Street);
+            console.log('The dialog was closed');
+            this.serv.getCanadaPostItemDetails(result[0].Id).subscribe(res => {
+              let result: CanadaPostSuggestItemDetails = res[0];
+              this.AddressFieldsEnabled = true;
+              this.PatientForm.controls.city.setValue(result.City);
+              this.PatientForm.controls.province.setValue(result.Province);
+              this.PatientForm.controls.postalCode.setValue(result.PostalCode);
+              this.PatientForm.controls.country.setValue(result.CountryName);
+              this.PatientForm.controls.buildingNum.setValue(result.BuildingNumber);
+              this.PatientForm.controls.subBuilding.setValue(result.SubBuilding);
+              this.PatientForm.controls.streetName.setValue(result.Street);
+              this.manualAddressToggle = false;
+            });
           });
         });
-      });
+      }
+      else {
+        this.serv.getCanadaPostItemDetails(value.Id).subscribe(res => {
+          console.log(res);
+          let result: CanadaPostSuggestItemDetails = res[0];
+          this.AddressFieldsEnabled = true;
+          this.PatientForm.controls.city.setValue(result.City);
+          this.PatientForm.controls.province.setValue(result.Province);
+          this.PatientForm.controls.postalCode.setValue(result.PostalCode);
+          this.PatientForm.controls.country.setValue(result.CountryName);
+          this.PatientForm.controls.buildingNum.setValue(result.BuildingNumber);
+          this.PatientForm.controls.subBuilding.setValue(result.SubBuilding);
+          this.PatientForm.controls.streetName.setValue(result.Street);
+          this.manualAddressToggle = false;
+        });
+
+      }
     }
-    else {
-      this.serv.getCanadaPostItemDetails(value.Id).subscribe(res => {
-        console.log(res);
-
-        let result: CanadaPostSuggestItemDetails = res[0];
-        this.AddressFieldsEnabled = true;
-        this.PatientForm.controls.city.setValue(result.City);
-        this.PatientForm.controls.province.setValue(result.Province);
-        this.PatientForm.controls.postalCode.setValue(result.PostalCode);
-        this.PatientForm.controls.country.setValue(result.CountryName);
-        this.PatientForm.controls.buildingNum.setValue(result.BuildingNumber);
-        this.PatientForm.controls.subBuilding.setValue(result.SubBuilding);
-        this.PatientForm.controls.streetName.setValue(result.Street);
-      });
-
-    }
-
   }
-
 
   displayFn(item: CanadaPostSuggestItem): string {
     return item && item.Text ? item.Text : '';
   }
-
-
-
-
 
 }
 

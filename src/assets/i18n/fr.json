@@ -8,7 +8,7 @@
                 "email": "Courriel",
                 "cell": "Téléphone portable",
                 "phone": "Téléphone à la maison",
-                "healthCard": "Numéro d'assurance maladie (pour les examen de la vue seulement)",
+                "healthCard": "Numéro d'assurance maladie ",
                 "insuranceCompany": "Compagnie d'assurance",
                 "manualAddressSelect": "Je souhaite saisir mon adresse manuellement",
                 "canadaAdressCompleteControl": "Adresse",
@@ -22,15 +22,36 @@
                 "country": "Pays",
                 "preferedContact": "Mode de communication préféré",
                 "firstVisitOption": "Ceci est ma première visite chez Harry Toulch Optométriste",
-                "disclaimer": " Je certifie que toutes les informations contenues dans ce formulaire sont correctes et autorise Harry Toulch à utiliser ces informations pour la tenue de dossiers et la création de profils."
+                "disclaimer": " Je certifie que toutes les informations contenues dans ce formulaire sont correctes et autorise Harry Toulch à utiliser ces informations pour la tenue de dossiers et la création de profils.",
+                "languageInput": "Choisir la langue"
             },
             "fieldslablesextras": {
                 "required": "requis",
                 "optional": "optionel"
             },
-            "fieldsvalidationerrors": {}
+            "fieldsvalidationerrors": {
+                "errfirstName": "Le prénom est requis",
+                "errlastName": "Le nom est requis",
+                "errbirthDate": "La date de naissance est requise",
+                "erremail": "L'e-mail est requis",
+                "invemail": "Format d'email invalide",
+                "errcell": "Veuillez entrer un numéro de téléphone portable valide",
+                "hintareaCode": "Inclure l'indicatif régional",
+                "errPreferredContact": "Le moyen de communication préféré est requis",
+                "errAddress": " L'adresse est requise",
+                "errBuildingNum": "Le numéro de bâtiment est requis",
+                "errStreetName": "Le nom de la rue est requis",
+                "errCity": "La ville est requis",
+                "errProvince": "La province est requis",
+                "errPostalCode": "Le code postal est requis",
+                "errCountry": "Le pays est requis",
+                "errDisclaimer": "Veuillez cocher la case pour continuer"
+            },
+            "cardHeader": "Information du patient"
         },
         "submitbutton": "Confirmer & Soumettre",
+        "HeaderPrimaryText": "Inscription des patients en ligne",
+        "HeaderSecondaryText": "Veuillez remplir le formulaire ci-dessous et soumettre vos information",
         "footerText": "Fondé en 1958, Harry Toulch Optométristes est situé au cœur du célèbre quartier du Plateau Mont-Royal à Montréal. Au coin de Saint-Laurent et Des Pins se trouve l'endroit où des générations de Montréalais sont allés passer des examens de la vue et mettre à jour leur look avec une nouvelle paire de lunettes. "
     }
 }

@@ -3,7 +3,7 @@
     <p>Please Select Address!</p>
     <mat-selection-list #shoes [multiple]="false" [(ngModel)]="data.DialogSelectedOption">
         <mat-list-option *ngFor="let item of data.SubOptions" [value]="item">
-            {{item.Next=='Find' || item.Next==''?item.Description:item.Text}}
+            {{item.Text+' '+ item.Description}}
         </mat-list-option>
     </mat-selection-list>
 </div>

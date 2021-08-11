@@ -2,3 +2,11 @@
     white-space: normal !important;
     font-family: PtSansReg;
 }
+
+::ng-deep body .mat-autocomplete-panel {
+    border-radius: 10px;
+}
+
+::ng-deep body .mat-option-text {
+    font-size: small;
+}

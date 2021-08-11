@@ -42,7 +42,8 @@ export class TelInputComponent implements ControlValueAccessor, MatFormFieldCont
   parts: FormGroup;
   stateChanges = new Subject<void>();
   focused = false;
-  touched = false;
+  @Input() touched = false;
+  @Input() inputType: string = '';
   controlType = 'app-tel-input';
   id = `app-tel-input-${TelInputComponent.nextId++}`;
   onChange = (_: any) => { };
@@ -110,7 +111,10 @@ export class TelInputComponent implements ControlValueAccessor, MatFormFieldCont
   }
 
   get errorState(): boolean {
-    return this.parts.invalid && this.touched;
+    if (this.inputType != 'home')
+      return (this.parts.invalid && this.touched);
+    else
+      return false;
   }
 
   constructor(
@@ -123,15 +127,15 @@ export class TelInputComponent implements ControlValueAccessor, MatFormFieldCont
     this.parts = formBuilder.group({
       area: [
         null,
-        [Validators.required, Validators.minLength(3), Validators.maxLength(3),Validators.pattern('[0-9]{3}')]
+        [Validators.required, Validators.minLength(3), Validators.maxLength(3), Validators.pattern('[0-9]{3}')]
       ],
       exchange: [
         null,
-        [Validators.required, Validators.minLength(3), Validators.maxLength(3),Validators.pattern('[0-9]{3}')]
+        [Validators.required, Validators.minLength(3), Validators.maxLength(3), Validators.pattern('[0-9]{3}')]
       ],
       subscriber: [
         null,
-        [Validators.required, Validators.minLength(4), Validators.maxLength(4),Validators.pattern('[0-9]{4}')]
+        [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]{4}')]
       ]
     });
 
@@ -139,6 +143,7 @@ export class TelInputComponent implements ControlValueAccessor, MatFormFieldCont
       this.ngControl.valueAccessor = this;
     }
     //this.focused = true;
+    // this.touched = true;
   }
 
   ngOnDestroy() {
