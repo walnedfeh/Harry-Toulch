@@ -35,6 +35,7 @@
                 "errbirthDate": "Date of Birth is required",
                 "erremail": "Email is required",
                 "invemail": "Invalid Email format",
+                "invemail2": " Invalid Email",
                 "errcell": "Please enter a valid cell phone number",
                 "hintareaCode": "Include area code",
                 "errPreferredContact": "Preferred communication way is required",

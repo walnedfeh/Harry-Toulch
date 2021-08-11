@@ -80,7 +80,7 @@ export class ThirdPartyServicesService {
 
 
   VerifyEmailBoolBlur(_email: string): Observable<boolean> {
-    return this.VerifyEmailBool(_email).pipe(delay(1000));
+    return this.VerifyEmailBool(_email).pipe(delay(100));
   }
 
 

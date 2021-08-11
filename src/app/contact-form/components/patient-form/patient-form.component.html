@@ -56,7 +56,7 @@
                         {{'patientform.formfields.fieldsvalidationerrors.erremail'|translate}}
                     </mat-error>
                     <mat-error *ngIf="f.email.errors?.notValidEmail">
-                        Not Valid Email
+                        {{'patientform.formfields.fieldsvalidationerrors.invemail2'|translate}}
                     </mat-error>
                     <mat-error *ngIf="PatientFormSubmitted && f.email.errors?.email">
                         {{'patientform.formfields.fieldsvalidationerrors.invemail'|translate}}

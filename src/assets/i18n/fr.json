@@ -35,6 +35,7 @@
                 "errbirthDate": "La date de naissance est requise",
                 "erremail": "L'e-mail est requis",
                 "invemail": "Format d'email invalide",
+                "invemail2": " Email invalide",
                 "errcell": "Veuillez entrer un numéro de téléphone portable valide",
                 "hintareaCode": "Inclure l'indicatif régional",
                 "errPreferredContact": "Le moyen de communication préféré est requis",

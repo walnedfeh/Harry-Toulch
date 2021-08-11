@@ -75,7 +75,7 @@ export class PatientFormComponent implements OnInit {
   }
 
 
-
+  //updateOn: 'blur'
   ngOnInit(): void {
 
 
