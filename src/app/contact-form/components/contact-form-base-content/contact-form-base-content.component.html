@@ -1,17 +1,18 @@
 <div class="container">
     <div class="d-flex flex-column">
         <div class="d-flex justify-content-center mt-5">
-            <img src="../../../../assets/img/harry-toulch-logo.png" alt="Harry-Toulch" style="width: 15%;height: 5%;">
+            <img src="../../../../assets/img/harry-toulch-logo.png" alt="Harry-Toulch" style="height: 5%;"
+                [ngStyle]="{width: logoWidthValue==true ? '15%' :'50%'}">
         </div>
         <div class="d-flex justify-content-center   ">
             <hr />
         </div>
 
         <div class="d-flex justify-content-center">
-            <p style="font-family: PtSansBold;font-size: large;"> {{'patientform.HeaderPrimaryText' | translate}}</p>
+            <p style="font-family: PtSansBold;font-size: large;"> {{'patientform.headerPrimaryText' | translate}}</p>
         </div>
         <div class="d-flex justify-content-center">
-            <p style="font-family: PtSansReg;"> {{'patientform.HeaderSecondaryText' | translate }}</p>
+            <p style="font-family: PtSansReg;"> {{'patientform.headerSecondaryText' | translate }}</p>
         </div>
     </div>
 

@@ -15,18 +15,19 @@ export function InitializePatientData(p: Patientdata): AddPatientRequest {
     result.city = p.city;
     result.province = p.province;
     result.country = p.country;
-    if (p.insuranceCompany) {
-        result.medicalCard = p.insuranceCompany;
-    }
     if (p.healthCard) {
-        result.medicalCardExp = p.healthCard;
+        result.medicalCard = p.healthCard;
     }
-    result.isDefaultSms = p.preferedContact == 'SMS' ? true : false;
-    result.isDefaultEmail = !result.isDefaultSms;
+    if (p.preferedContact == 'SMS') {
+        result.isDefaultSms = true;
+        result.isDefaultEmail = false;
+    }
+    else {
+        result.isDefaultEmail = true;
+        result.isDefaultSms = false;
+    }
     result.postalCode = p.postalCode;
     result.streetNumber = p.buildingNum;
     result.unit = p.subBuilding;
-    result.isDefaultSms = true;
-    result.isDefaultEmail = false;
     return result;
 }

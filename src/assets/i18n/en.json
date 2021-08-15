@@ -46,13 +46,15 @@
                 "errProvince": "Province is required",
                 "errPostalCode": "PostalCode is required",
                 "errCountry": "Country is required",
-                "errDisclaimer": "Please check the box to continue"
+                "errDisclaimer": "Please check the box to continue",
+                "errhealthCard": "Health card should be 12 characters"
             },
-            "cardHeader": "Patient information"
+            "cardHeader": "Patient information",
+            "thankYouLetter": "Thank you,Your information has been successfully sent."
         },
         "submitbutton": "Confirm & Submit",
-        "HeaderPrimaryText": "Online Patient Registeration",
-        "HeaderSecondaryText": "Please complete the form below and submit your application",
+        "headerPrimaryText": "Online Patient Registeration",
+        "headerSecondaryText": "Please complete the form below and submit your application",
         "footerText": " Established in 1958, Harry Toulch Optometrists is located in the heart of Montreal’s famous Le Plateau Mont Royal neighborhood. At the corner of Saint-Laurent and Des Pins is where generations of Montrealers have gone for eye exams and to update their look with a new pair of eyeglasses."
     }
 }

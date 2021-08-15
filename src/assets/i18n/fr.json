@@ -46,13 +46,15 @@
                 "errProvince": "La province est requis",
                 "errPostalCode": "Le code postal est requis",
                 "errCountry": "Le pays est requis",
-                "errDisclaimer": "Veuillez cocher la case pour continuer"
+                "errDisclaimer": "Veuillez cocher la case pour continuer",
+                "errhealthCard": "La carte Santé doit comporter 12 caractères"
             },
-            "cardHeader": "Information du patient"
+            "cardHeader": "Information du patient",
+            "thankYouLetter": "Merci, vos informations ont été envoyées avec succès."
         },
         "submitbutton": "Confirmer & Soumettre",
-        "HeaderPrimaryText": "Inscription des patients en ligne",
-        "HeaderSecondaryText": "Veuillez remplir le formulaire ci-dessous et soumettre vos information",
+        "headerPrimaryText": "Inscription des patients en ligne",
+        "headerSecondaryText": "Veuillez remplir le formulaire ci-dessous et soumettre vos information",
         "footerText": "Fondé en 1958, Harry Toulch Optométristes est situé au cœur du célèbre quartier du Plateau Mont-Royal à Montréal. Au coin de Saint-Laurent et Des Pins se trouve l'endroit où des générations de Montréalais sont allés passer des examens de la vue et mettre à jour leur look avec une nouvelle paire de lunettes. "
     }
 }

@@ -11,7 +11,7 @@
                         English
                     </mat-option>
                     <mat-option [value]="'fr'">
-                        Française
+                        Français
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -85,6 +85,9 @@
                         <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
                     </mat-label>
                     <input type="text" formControlName="healthCard" matInput>
+                    <mat-error *ngIf="f.healthCard.errors">
+                        {{'patientform.formfields.fieldsvalidationerrors.errhealthCard'| translate}}
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-lg-3 col-md-4 col-sm-6 col-xs-12 {{paddingValue}}">
                     <mat-label>{{'patientform.formfields.fieldslables.preferedContact'| translate}}
@@ -142,7 +145,7 @@
                     <mat-slide-toggle [color]="'primary'" formControlName="manualAddressSelect">
                         {{'patientform.formfields.fieldslables.manualAddressSelect'| translate}}
                     </mat-slide-toggle>
-                </div>
+                </div><br><br><br>
                 <mat-form-field class="col-lg-3 col-md-4 col-sm-6 col-xs-12 {{paddingValue}}"
                     *ngIf="AddressFieldsEnabled" appearance="outline">
                     <mat-label>{{'patientform.formfields.fieldslables.buildingNum'| translate}}
@@ -210,7 +213,6 @@
                         {{'patientform.formfields.fieldsvalidationerrors.errCountry'|translate}}
                     </mat-error>
                 </mat-form-field>
-
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 {{paddingValue}}">
                     <mat-checkbox formControlName="firstVisitOption" [color]="'primary'">
                         {{'patientform.formfields.fieldslables.firstVisitOption'| translate}}
@@ -229,7 +231,8 @@
             </div><br>
             <div class="row">
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">{{'patientform.submitbutton'|translate}}</button>
+                    <button type="submit" class="btn btn-primary"
+                        [disabled]="SubmitButtonDisabled">{{'patientform.submitbutton'|translate}}</button>
                 </div>
             </div>
             <div class="row" *ngIf="patientFormSpinnerEnabled">
@@ -267,5 +270,14 @@
 
             </div>
         </div>
+    </div>
+</p-dialog>
+
+<p-dialog header=" " [(visible)]="ThankYouDialogVisible" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false" [position]="'top'" [closable]="false">
+    <p style="text-align: center;"><strong> {{'patientform.formfields.thankYouLetter'|translate}}</strong>
+    </p>
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-primary" style="width: 150px;" type="button" (click)="RedirectAfterSubmit()">Ok</button>
     </div>
 </p-dialog>

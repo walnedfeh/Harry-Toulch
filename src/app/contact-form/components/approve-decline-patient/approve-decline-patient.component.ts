@@ -11,7 +11,7 @@ import { AddPatientRequest } from '../../models/add-patient-request';
 import { LoginBody } from '../../models/login-body';
 import { Patientdata } from '../../models/patientdata';
 import { PatientService } from '../../services/patient.service';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-approve-decline-patient',
   templateUrl: './approve-decline-patient.component.html',
@@ -34,7 +34,10 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
   PatientData: Patientdata = new Patientdata();
   NotAuthorozedDialogHeader: string = '';
   constructor(private route: ActivatedRoute, private fb: FormBuilder, private pserv: PatientService,
-    private messageService: MessageService) { }
+    private translateService: TranslateService,
+    private messageService: MessageService) {
+
+  }
 
   ngOnDestroy(): void {
     localStorage.clear();
@@ -55,7 +58,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         p.fullAddress = params.get('fullAddress') || 'n/a';
         p.streetName = params.get('streetName') || 'n/a';
         p.healthCard = params.get('healthCard') || 'n/a';
-        p.insuranceCompany = params.get('insuranceCompany') || 'n/a';
+        //   p.insuranceCompany = params.get('insuranceCompany') || 'n/a';
         p.city = params.get('city') || 'n/a';
         p.province = params.get('province') || 'n/a';
         p.postalCode = params.get('postalCode') || 'n/a';
@@ -66,14 +69,26 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         return p;
       })
     );
-/*preferedContact */
+    /*preferedContact */
     this.LoginForm = this.fb.group({
       userName: ['', Validators.compose([Validators.required])],
       password: ['', Validators.compose([Validators.required])]
     });
 
     this.PatientObservable.subscribe(x => {
-      console.log(x);
+
+      let Old: any = <any>JSON.parse(JSON.stringify(localStorage.getItem('patient') || ''));
+      console.log(Old);
+
+      let New: any = <any>JSON.stringify(InitializePatientData(x));
+      console.log(New);
+      let cantApprove: boolean = Old == New;
+      // let cantApprove: boolean = false;
+
+      console.log(New == Old);
+
+
+
 
       if (this.SecurityParam == '4545') {
         if (x.firstName != 'n/a' &&
@@ -91,8 +106,15 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
           x.buildingNum != 'n/a' &&
           x.preferedContact != 'n/a' &&
           this.SecurityParam == '4545') {
-          this.AllFieldsExists = true;
-          this.PatientData = x;
+          if (cantApprove == false) {
+            this.AllFieldsExists = true;
+            this.PatientData = x;
+          } else {
+            this.NotAuthorozedDialogHeader = `Error`;
+            this.ErrorMessage = `This patient already approved.`;
+            this.NotAuthorozedDialogEnabled = true;
+          }
+
         } else {
           this.NotAuthorozedDialogHeader = `Error`;
           this.ErrorMessage = `Invalid patient data.`;
@@ -104,6 +126,8 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         this.NotAuthorozedDialogEnabled = true;
       }
     });
+    this.translateService.addLangs(['en', 'fr']);
+    this.translateService.use('en');
   }
 
 
@@ -147,6 +171,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
               this.NotAuthorozedDialogHeader = ``;
               this.ErrorMessage = `Patient data has been approved.`;
               this.NotAuthorozedDialogEnabled = true;
+              localStorage.setItem('patient', JSON.stringify(patient));
             }
           })
           ).subscribe(data => { });
@@ -166,6 +191,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
     }
   }
 
+
   ApprovePatient() {
     let Token: string = <string>localStorage.getItem('Token');
     if (Token) {
@@ -184,6 +210,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
           this.NotAuthorozedDialogHeader = ``;
           this.ErrorMessage = `Patient data has been approved.`;
           this.NotAuthorozedDialogEnabled = true;
+          localStorage.setItem('patient', JSON.stringify(patient));
         }
       })
       ).subscribe(data => { });

@@ -15,6 +15,7 @@ import { ThirdPartyServicesService } from '../../services/third-party-services-s
 import { MyTel } from '../tel-input/tel-input.component';
 import { TranslateService } from '@ngx-translate/core';
 import { EmailAsyncValidator } from '../../custom-validators/async-validators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-patient-form',
@@ -41,13 +42,16 @@ export class PatientFormComponent implements OnInit {
   supportLanguages = ['en', 'fr'];
   cellTouched: boolean = false;
   paddingValue: string = '';
+  SubmitButtonDisabled: boolean = false;
+  ThankYouDialogVisible: boolean = false;
   constructor(private fb: FormBuilder,
     private serv: ThirdPartyServicesService,
     private dialog: MatDialog,
     private pserv: PatientService,
     private messageService: MessageService,
     private translateService: TranslateService,
-    private emailValidator: EmailAsyncValidator) {
+    private emailValidator: EmailAsyncValidator,
+    private router: Router) {
     this.translateService.addLangs(this.supportLanguages);
     this.translateService.setDefaultLang('en');
     const browserlang = this.translateService.getBrowserLang();
@@ -88,8 +92,8 @@ export class PatientFormComponent implements OnInit {
       cell: new FormControl(this.InitialMobileNumbersValue, cellPhoneNumberValidator()),
       phone: new FormControl(this.InitialMobileNumbersValue,),
       streetName: ['', Validators.required],
-      healthCard: ['',],
-      insuranceCompany: ['',],
+      healthCard: new FormControl('', { updateOn: 'blur', validators: [Validators.minLength(12), Validators.maxLength(12)] }),
+      //insuranceCompany: ['',],
       city: ['', Validators.required],
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
@@ -103,10 +107,9 @@ export class PatientFormComponent implements OnInit {
       disclaimer: [false, Validators.requiredTrue]
     });
 
-    console.log(this.f.cell.touched);
 
-    this.PatientForm.get('email')?.valueChanges.subscribe(t => {
-      console.log(this.f.email.errors);
+    this.PatientForm.get('healthCard')?.valueChanges.subscribe(t => {
+      console.log(this.f.healthCard.errors);
     });
     this.filteredOptions = this.canadaAdressCompleteControl.valueChanges.pipe(
       startWith(''),
@@ -141,9 +144,15 @@ export class PatientFormComponent implements OnInit {
     });
   }
 
+
+  RedirectAfterSubmit() {
+    window.location.href = '/';
+  }
+
   onPatientFormSubmit = (e: any) => {
     this.PatientFormSubmitted = true;
     this.cellTouched = true;
+
     if (this.PatientForm.get('manualAddressSelect')?.value == true) {
       this.canadaAdressCompleteControl.setValue(this.PatientForm.get('manualAddressText')?.value);
     } else {
@@ -156,20 +165,24 @@ export class PatientFormComponent implements OnInit {
     }
 
     this.patientFormSpinnerEnabled = true;
+    this.SubmitButtonDisabled = true;
     let p: Patientdata = new Patientdata();
     p = Object.assign(p, this.PatientForm.value);
     p.cell = '(' + this.PatientForm.get('cell')?.value.area + ')' +
       ' ' + this.PatientForm.get('cell')?.value.exchange +
       '-' + this.PatientForm.get('cell')?.value.subscriber;
 
-    let phoneExists: boolean = this.PatientForm.get('phone')?.value.area &&
-      this.PatientForm.get('phone')?.value.exchange
-      && this.PatientForm.get('phone')?.value.subscriber;
+    let phoneExists: boolean = this.PatientForm.get('phone')?.value.area.length == 3 &&
+      this.PatientForm.get('phone')?.value.exchange.length == 3
+      && this.PatientForm.get('phone')?.value.subscriber.length == 4;
 
     if (phoneExists) {
       p.phone = '(' + this.PatientForm.get('phone')?.value.area + ')' +
         ' ' + this.PatientForm.get('phone')?.value.exchange +
         '-' + this.PatientForm.get('phone')?.value.subscriber;
+    }
+    else {
+      p.phone = '';
     }
     p.fullAddress = this.canadaAdressCompleteControl.value.Text;
     let MatchedzCodes: ZCodeMatch[] = [];
@@ -184,11 +197,11 @@ export class PatientFormComponent implements OnInit {
               MatchedzCodes.push(z);
               this.serv.VerifyEmailBool(p.email).subscribe(a => {
                 p.isValidEmail = a;
-                if (a) {
-                  this.messageService.add({ severity: 'success', summary: 'Valid', detail: p.email + ' is valid' });
-                } else {
-                  this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
-                }
+                // if (a) {
+                //   this.messageService.add({ severity: 'success', summary: 'Valid', detail: p.email + ' is valid' });
+                // } else {
+                //   this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
+                // }
 
                 if (MatchedzCodes.length > 0) {
                   p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
@@ -196,8 +209,12 @@ export class PatientFormComponent implements OnInit {
                 console.log(p);
                 this.pserv.sendEmail(p).subscribe(b => {
                   console.log(b);
-                  this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sended' });
+                  this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sent' });
                   this.patientFormSpinnerEnabled = false;
+                  this.SubmitButtonDisabled = false;
+                  this.PatientForm.reset();
+                  this.ThankYouDialogVisible = true;
+                  // window.location.href = '/';
                 }, error => {
                   this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
                   this.patientFormSpinnerEnabled = false;
@@ -208,19 +225,23 @@ export class PatientFormComponent implements OnInit {
           else {
             this.serv.VerifyEmailBool(p.email).subscribe(a => {
               p.isValidEmail = a;
-              if (a) {
-                this.messageService.add({ severity: 'info', summary: 'Valid', detail: p.email + ' is valid' });
-              } else {
-                this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
-              }
+              // if (a) {
+              //   this.messageService.add({ severity: 'info', summary: 'Valid', detail: p.email + ' is valid' });
+              // } else {
+              //   this.messageService.add({ severity: 'error', summary: 'Invalid', detail: p.email + ' is invalid' });
+              // }
               console.log(p);
               if (MatchedzCodes.length > 0) {
                 p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
               }
               console.log(p);
               this.pserv.sendEmail(p).subscribe(b => {
-                this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sended' });
+                this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sent' });
                 this.patientFormSpinnerEnabled = false;
+                this.SubmitButtonDisabled = false;
+                this.PatientForm.reset();
+                this.ThankYouDialogVisible = true;
+                // window.location.href = '/';
               }, error => {
                 this.patientFormSpinnerEnabled = false;
                 this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });

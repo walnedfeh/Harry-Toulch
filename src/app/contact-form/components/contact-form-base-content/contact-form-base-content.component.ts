@@ -8,8 +8,9 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ContactFormBaseContentComponent implements OnInit {
 
+  logoWidthValue: boolean = true;
   constructor() {
-
+    this.logoWidthValue = window.innerWidth > 500 ? true : false;
   }
 
   ngOnInit(): void {
