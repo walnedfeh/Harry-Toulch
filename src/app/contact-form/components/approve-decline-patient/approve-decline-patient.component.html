@@ -24,8 +24,9 @@
             <!-- </div> -->
 
         </div>
+        <!--  -->
         <div class="row" *ngIf="PushPatientSpinnerEnabled">
-            <div class="d-flex justify-content-left">
+            <div class="d-flex justify-content-center">
                 <p-progressSpinner [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner" strokeWidth="5"
                     fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
             </div>
@@ -36,7 +37,6 @@
 <br>
 <br>
 <br>
-
 <br>
 <br>
 <br>
@@ -45,7 +45,7 @@
 
 <p-dialog header="Login" [(visible)]="LoginFormEnabled" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
     [draggable]="false" [resizable]="false" [position]="'top'" [closable]="true">
-    <p>Please enter username and password!</p>
+    <p>Please enter username and password.</p>
     <form [formGroup]="LoginForm" (ngSubmit)="onLoginFormSubmitted($event)">
         <div class="row">
             <div class="d-flex  flex-column">
@@ -74,13 +74,20 @@
                             required
                         </mat-error>
                     </mat-form-field>
-                    <mat-error *ngIf="LoginErrorEnabled">Invalid username or password.
+
+                </div>
+                <div class="p-2  d-flex justify-content-center" *ngIf="LoginErrorEnabled">
+                    <mat-error>Invalid username or password.
                     </mat-error>
                 </div>
-                <div class="p-2  d-flex justify-content-center">
-                    <button mat-flat-button color="primary" style="width: 150px;" type="submit">Login</button>
-                    <button mat-flat-button style="width: 150px;" type="button"
-                        (click)="ResetPatientForm()">reset</button>
+                <div class="d-flex flex-wrap justify-content-center">
+                    <div class="p-2">
+                        <button mat-raised-button color="primary" style="width: 150px;" type="submit">Login</button>
+                    </div>
+                    <div class="p-2">
+                        <button mat-raised-button style="width: 150px;" type="button"
+                            (click)="ResetPatientForm()">reset</button>
+                    </div>
                 </div>
             </div>
         </div>

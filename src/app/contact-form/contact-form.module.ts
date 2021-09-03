@@ -31,6 +31,7 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { MatSelectModule } from '@angular/material/select';
 import { ButtonModule } from 'primeng/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { UpdatePatientComponent } from './components/update-patient/update-patient.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     PatientFormComponent,
     TelInputComponent,
     NotFoundComponent,
-    HttpErrorComponent
+    HttpErrorComponent,
+    UpdatePatientComponent,
 
   ],
   imports: [

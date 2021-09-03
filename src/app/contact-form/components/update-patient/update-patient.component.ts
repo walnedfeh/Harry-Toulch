@@ -1,46 +1,50 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { InitializePatientData } from '../../custom-validators/inittialize-patient-data';
-import { AddPatientRequest } from '../../models/add-patient-request';
-import { LoginBody } from '../../models/login-body';
 import { Patientdata } from '../../models/patientdata';
 import { PatientService } from '../../services/patient.service';
 import { TranslateService } from '@ngx-translate/core';
+import { EmailAsyncValidator } from '../../custom-validators/email-async-validator';
+import { map, tap } from 'rxjs/operators';
+import { InitializePatientData } from '../../custom-validators/inittialize-patient-data';
+import { LoginBody } from '../../models/login-body';
+import { environment } from 'src/environments/environment';
+import { Updatepatientrequest } from '../../models/update-patient-request';
+import { AddPatientRequest } from '../../models/add-patient-request';
 @Component({
-  selector: 'app-approve-decline-patient',
-  templateUrl: './approve-decline-patient.component.html',
-  styleUrls: ['./approve-decline-patient.component.css'],
+  selector: 'app-update-patient',
+  templateUrl: './update-patient.component.html',
+  styleUrls: ['./update-patient.component.css'],
   providers: [MessageService]
 })
-export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
+export class UpdatePatientComponent implements OnInit {
+  UpdatePatientForm!: FormGroup;
+  LoginForm!: FormGroup;
+  UpdatePatientFormSubmitted: boolean = false;
   PatientObservable!: Observable<Patientdata>;
   SecurityParam: string = '';
-  LoginFormEnabled: boolean = false;
-  LoginForm!: FormGroup;
-  passwordHide = true;
-  LoginFormSubmitted: boolean = false;
-  PushPatientSpinnerEnabled: boolean = false;
+  UpdatePatientSpinnerEnabled: boolean = false;
+  NotAuthorozedDialogHeader: string = '';
   NotAuthorozedDialogEnabled: boolean = false;
   ErrorMessage: string = '';
   AllFieldsExists: boolean = false;
   LoginErrorEnabled: boolean = false;
   LoginSpinnerEnabled: boolean = false;
+  LoginFormEnabled: boolean = false;
+  LoginFormSubmitted: boolean = false;
   PatientData: Patientdata = new Patientdata();
-  NotAuthorozedDialogHeader: string = '';
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private pserv: PatientService,
+  zCode: string = '';
+  passwordHide = true;
+  constructor(private fb: FormBuilder,
+    private pserv: PatientService,
+    private async: EmailAsyncValidator,
+    private route: ActivatedRoute,
     private translateService: TranslateService,
-    private messageService: MessageService) {
+    private messageService: MessageService
+  ) { }
 
-  }
-
-  ngOnDestroy(): void {
-  }
 
   ngOnInit(): void {
     let today: Date = new Date();
@@ -75,15 +79,22 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         return p;
       })
     );
-    /*preferedContact */
+    this.UpdatePatientForm = this.fb.group({
+      zCode: new FormControl('', {
+        updateOn: 'blur', validators: [Validators.required, Validators.pattern('Z|z[0-9]+$')],
+        asyncValidators: [this.async.zCodeAsyncValidator.bind(this)]
+      }),
+    });
     this.LoginForm = this.fb.group({
       userName: ['', Validators.compose([Validators.required])],
       password: ['', Validators.compose([Validators.required])]
     });
 
+
     this.PatientObservable.subscribe(x => {
 
-      let Old: any = <any>JSON.parse(JSON.stringify(localStorage.getItem('pushpatient') || ''));
+      let Old: any = <any>JSON.parse(JSON.stringify(localStorage.getItem('updatepatient') || ''));
+
       let New: any = <any>JSON.stringify(InitializePatientData(x));
       let cantApprove: boolean = Old == New;
 
@@ -111,7 +122,7 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
             this.PatientData = x;
           } else {
             this.NotAuthorozedDialogHeader = `Error`;
-            this.ErrorMessage = `This patient already approved.`;
+            this.ErrorMessage = `This patient already updated.`;
             this.NotAuthorozedDialogEnabled = true;
           }
 
@@ -130,15 +141,66 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
     this.translateService.use('en');
   }
 
+  onUpdatePatientFormSubmit(e: any) {
+    this.UpdatePatientFormSubmitted = true;
+    if (this.UpdatePatientForm.invalid) {
+      return;
+    }
+
+    this.zCode = this.UpdatePatientForm.get('zCode')?.value.split('Z')[1];
+    let Token: string = <string>localStorage.getItem('Token');
+    if (Token) {
+      this.UpdatePatientSpinnerEnabled = true;
+      let patient: Updatepatientrequest = <Updatepatientrequest>InitializePatientData(this.PatientData);
+      let storgePatient: AddPatientRequest = InitializePatientData(this.PatientData);
+      patient.id = this.zCode;
+      let newPatientZcode: string = '';
+      this.pserv.updatePatient(patient, <string>localStorage.getItem('Token')).pipe(tap({
+        next: (res: any) => {
+          newPatientZcode = 'z' + res?.id;
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: 'ُError', detail: 'Error while updating patient' });
+          this.UpdatePatientSpinnerEnabled = false;
+        },
+        complete: () => {
+          this.UpdatePatientSpinnerEnabled = false;
+          this.messageService.add({ severity: 'info', summary: 'Updated', detail: 'Patient data has been updated' });
+
+          this.NotAuthorozedDialogHeader = ``;
+          this.ErrorMessage = `Patient data has been updated (` + newPatientZcode + `).`;
+          this.NotAuthorozedDialogEnabled = true;
+          localStorage.removeItem('updatepatient');
+          localStorage.setItem('updatepatient', JSON.stringify(storgePatient));
+        }
+      })
+      ).subscribe(data => { });
+    } else {
+      this.DisplayLoginForm();
+    }
+  }
+
 
   get f() {
     return this.LoginForm.controls;
   }
 
-  ResetPatientForm() {
-    this.LoginForm.reset();
+  get fu() {
+    return this.UpdatePatientForm.controls;
   }
 
+
+
+  DisplayLoginForm() {
+    if (this.AllFieldsExists && this.SecurityParam == '4545') {
+      this.LoginFormEnabled = true;
+    }
+    else {
+      this.NotAuthorozedDialogHeader = `Error`;
+      this.ErrorMessage = `You're not autorized to make this action.`;
+      this.NotAuthorozedDialogEnabled = true;
+    }
+  }
   onLoginFormSubmitted(e: any) {
     this.LoginFormSubmitted = true;
     this.LoginErrorEnabled = false;
@@ -164,24 +226,26 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
           this.LoginSpinnerEnabled = false;
         },
         complete: () => {
-          let patient: AddPatientRequest = InitializePatientData(this.PatientData);
+          let patient: Updatepatientrequest = <Updatepatientrequest>InitializePatientData(this.PatientData);
+          let storgePatient: AddPatientRequest = InitializePatientData(this.PatientData);
+          patient.id = this.zCode;
           let newPatientZcode: string = '';
-          this.pserv.createNewPatient(patient, <string>localStorage.getItem('Token')).pipe(tap({
+          this.pserv.updatePatient(patient, <string>localStorage.getItem('Token')).pipe(tap({
             next: (res: any) => {
               newPatientZcode = 'z' + res?.id;
             },
             error: (err) => {
-              this.messageService.add({ severity: 'error', summary: 'ُError', detail: 'Error while approving patient' });
+              this.messageService.add({ severity: 'error', summary: 'ُError', detail: 'Error while updating patient' });
               this.LoginSpinnerEnabled = false;
             },
             complete: () => {
               this.LoginSpinnerEnabled = false;
-              this.messageService.add({ severity: 'info', summary: 'Approved', detail: 'Patient data has been approved' });
+              this.messageService.add({ severity: 'info', summary: 'Approved', detail: 'Patient data has been updated' });
               this.NotAuthorozedDialogHeader = ``;
-              this.ErrorMessage = `Patient data has been approved matching the new zCode (` + newPatientZcode + `).`;
+              this.ErrorMessage = `Patient data has been updated (` + newPatientZcode + `).`;
               this.NotAuthorozedDialogEnabled = true;
-              localStorage.removeItem('pushpatient');
-              localStorage.setItem('pushpatient', JSON.stringify(patient));
+              localStorage.removeItem('updatepatient');
+              localStorage.setItem('updatepatient', JSON.stringify(storgePatient));
             }
           })
           ).subscribe(data => { });
@@ -190,49 +254,8 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
 
   }
 
-  DisplayLoginForm() {
-    if (this.AllFieldsExists && this.SecurityParam == '4545') {
-      this.LoginFormEnabled = true;
-    }
-    else {
-      this.NotAuthorozedDialogHeader = `Error`;
-      this.ErrorMessage = `You're not autorized to make this action.`;
-      this.NotAuthorozedDialogEnabled = true;
-    }
-  }
-
-
-  ApprovePatient() {
-    let Token: string = <string>localStorage.getItem('Token');
-    if (Token) {
-      this.PushPatientSpinnerEnabled = true;
-      let patient: AddPatientRequest = InitializePatientData(this.PatientData);
-      let newPatientZcode: string = '';
-      this.pserv.createNewPatient(patient, <string>localStorage.getItem('Token')).pipe(tap({
-        next: (res: any) => {
-          newPatientZcode = 'z' + res?.id;
-        },
-        error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'ُError', detail: 'Error while approving patient' });
-          this.PushPatientSpinnerEnabled = false;
-        },
-        complete: () => {
-          this.PushPatientSpinnerEnabled = false;
-          this.messageService.add({ severity: 'info', summary: 'Approved', detail: 'Patient data has been approved' });
-
-          this.NotAuthorozedDialogHeader = ``;
-          this.ErrorMessage = `Patient data has been approved matching the new zCode (` + newPatientZcode + `).`;
-          this.NotAuthorozedDialogEnabled = true;
-          localStorage.removeItem('pushpatient');
-          localStorage.setItem('pushpatient', JSON.stringify(patient));
-        }
-      })
-      ).subscribe(data => { });
-    } else {
-      this.DisplayLoginForm();
-    }
+  ResetPatientForm() {
+    this.LoginForm.reset();
   }
 
 }
-
-

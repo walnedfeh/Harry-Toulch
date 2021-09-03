@@ -8,6 +8,7 @@ import { LoginBody } from '../models/login-body';
 import { Param } from '../models/param';
 import { Patient } from '../models/patient';
 import { Patientdata } from '../models/patientdata';
+import { Updatepatientrequest } from '../models/update-patient-request';
 import { ZCodeMatch } from '../models/z-code-match';
 
 @Injectable({
@@ -17,7 +18,7 @@ export class PatientService {
   ApiUrl: string = environment.ApiUrl;
   constructor(private http: HttpClient) { }
 
-  createNewPatient(_body: AddPatientRequest, _token: string): Observable<boolean> {
+  createNewPatient(_body: AddPatientRequest, _token: string): Observable<any> {
     const options = {
       headers: new HttpHeaders({
         'Accept': 'application/json,*/*',
@@ -25,11 +26,29 @@ export class PatientService {
         'token': _token
       }),
     };
-    return this.http.post<boolean>(this.ApiUrl + '/Patient', _body, options).pipe(map((data: any) => {
+    return this.http.post<any>(this.ApiUrl + '/Patient', _body, options).pipe(map((data: any) => {
       let tempData = data["patient"];
-      return tempData ? true : false;
+      let patientId = (<string>tempData?.id).split('-')[1];
+      return patientId ? { result: true, id: patientId } : { result: false, id: '' };
     }));
   }
+
+  updatePatient(_body: Updatepatientrequest, _token: string): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({
+        'Accept': 'application/json,*/*',
+        'Content-Type': 'application/json',
+        'token': _token
+      }),
+    };
+    return this.http.put<any>(this.ApiUrl + '/Patient', _body, options).pipe(map((data: any) => {
+      let tempData = data["patient"];
+      let patientId = (<string>tempData?.id).split('-')[1];
+      return patientId ? { result: true, id: patientId } : { result: false, id: '' };
+    }));
+  }
+
+
   getPatientsList(_param: string, _paramVal: string): Observable<Patient[]> {
     const params = new HttpParams().set(_param, _paramVal).set('match', 'all');
     return this.http.get<Patient[]>(this.ApiUrl + '/Patient/list', { params }).pipe(
@@ -45,6 +64,8 @@ export class PatientService {
       })
     );
   }
+
+
 
   getParamZcodesArr(_param: string, _paramVal: string): Observable<string[]> {
     return this.getPatientsList(_param, _paramVal).pipe(
@@ -85,7 +106,7 @@ export class PatientService {
       headers: new HttpHeaders({
         'Accept': 'application/json,*/*',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa('carlo:1234')
+        'Authorization': 'Basic ' + btoa(environment.loginUserName + ':' + environment.loginPassword)
       }),
     };
     return this.http.post<string>(this.ApiUrl + '/login/doctors', _body, options).pipe(map((data: any) => {
@@ -103,8 +124,7 @@ export class PatientService {
   getPatientListByFirstLastName(_firstName: string, _lastName: string): Observable<Patient[]> {
     let params: HttpParams = new HttpParams()
       .set('firstName', _firstName)
-      .set('lastName', _lastName)
-      .set('match', 'all');
+      .set('lastName', _lastName);
 
     return this.http.get<Patient[]>(this.ApiUrl + '/Patient/list', { params }).pipe(
       map((data: any) => {
@@ -153,6 +173,16 @@ export class PatientService {
       })
     );
   }
+
+
+
+  getPatientbyId(_zCode: string): Observable<boolean> {
+
+    return this.http.get<boolean>(this.ApiUrl + '/Patient/' + _zCode).pipe(map((data: any) => {
+      return data != null ? true : false;
+    }));
+  }
+
 
   /*Harru Toulch Security Login*/
   harryToulchLogin(_userName: string, _password: string, _body: LoginBody): Observable<string> {

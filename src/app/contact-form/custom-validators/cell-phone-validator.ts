@@ -19,3 +19,21 @@ export function cellPhoneNumberValidator(): ValidatorFn {
 
     }
 }
+
+
+export function homePhoneNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+        const value = control.value;
+        const areaNumeric = /[0-9]+/.test(value?.area);
+        const exNumeric = /[0-9]+/.test(value?.exchange);
+        const SubsNumeric = /[0-9]+/.test(value?.subscriber);
+        const cellValidFormat = areaNumeric && exNumeric && SubsNumeric;
+
+        if (cellValidFormat) {
+            return null;
+        } else {
+            return { invalidCell: true };
+        }
+
+    }
+}

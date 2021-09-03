@@ -3,6 +3,12 @@
     font-family: PtSansReg;
 }
 
+:host::ng-deep.mat-slide-toggle-content {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 ::ng-deep body .mat-autocomplete-panel {
     border-radius: 10px;
 }

@@ -5,13 +5,15 @@ import { ContactFormBaseContentComponent } from './components/contact-form-base-
 import { HttpErrorComponent } from './components/http-error/http-error.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { PatientFormComponent } from './components/patient-form/patient-form.component';
+import { UpdatePatientComponent } from './components/update-patient/update-patient.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'contact-form/patient-form', pathMatch: 'full' },
   {
     path: 'contact-form', component: ContactFormBaseContentComponent, children: [
       { path: 'patient-form', component: PatientFormComponent },
-      { path: 'approve-patient', component: ApproveDeclinePatientComponent }
+      { path: 'approve-patient', component: ApproveDeclinePatientComponent },
+      { path: 'update-patient', component: UpdatePatientComponent }
     ]
   },
   { path: 'error', component: HttpErrorComponent },

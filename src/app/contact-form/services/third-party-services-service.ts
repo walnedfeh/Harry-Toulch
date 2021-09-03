@@ -2,6 +2,7 @@ import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { CanadaPostSuggestItem } from '../models/canada-post-suggest-item';
 import { CanadaPostSuggestItemDetails } from '../models/canada-post-suggest-item-details';
 import { EmailVerifierResponse } from '../models/email-verifier-response';
@@ -18,7 +19,7 @@ export class ThirdPartyServicesService {
   /*Third Party Services Integration*/
 
   getCanadaPostSuggestedItems(searchItem: string, Country: string, Lang: string, LastId?: string): Observable<CanadaPostSuggestItem[]> {
-    let params = new HttpParams().set('Key', 'UB99-TG36-YW24-PC39')
+    let params = new HttpParams().set('Key', environment.CanadaPostAPIKey)
       .set('SearchTerm', searchItem)
       .set('SearchFor', 'Everything')
       .set('LanguagePreference', Lang)
@@ -26,7 +27,7 @@ export class ThirdPartyServicesService {
       .set('MaxSuggestions', '7')
       .set('MaxResults', '100');
     if (LastId != null) {
-      params = new HttpParams().set('Key', 'UB99-TG36-YW24-PC39')
+      params = new HttpParams().set('Key', environment.CanadaPostAPIKey)
         .set('SearchTerm', searchItem)
         .set('LanguagePreference', Lang)
         .set('SearchFor', 'Everything')
@@ -48,7 +49,7 @@ export class ThirdPartyServicesService {
   }
 
   getCanadaPostItemDetails(Id: string): Observable<CanadaPostSuggestItemDetails[]> {
-    const params = new HttpParams().set('Key', 'UB99-TG36-YW24-PC39')
+    const params = new HttpParams().set('Key', environment.CanadaPostAPIKey)
       .set('Id', Id);
     return this.http.get<any[]>(this.CanadaPostItemDetailsURL, { params }).pipe(map((data: any) => {
       let tempdata = data["Items"];
@@ -64,7 +65,7 @@ export class ThirdPartyServicesService {
 
   VerifyEmail(_email: string): Observable<EmailVerifierResponse> {
     const params = new HttpParams()
-      .set('APIKey', 'ev-54c43e66c50dbc66ee4b6c972d4ed0fc')
+      .set('APIKey', environment.EmailVerfierAPIKey)
       .set('EmailAddress', _email);
     return this.http.get<EmailVerifierResponse>(this.EmailVerifierURL, { params });
   }
@@ -80,7 +81,7 @@ export class ThirdPartyServicesService {
 
 
   VerifyEmailBoolBlur(_email: string): Observable<boolean> {
-    return this.VerifyEmailBool(_email).pipe(delay(100));
+    return this.VerifyEmailBool(_email).pipe();
   }
 
 
@@ -89,5 +90,14 @@ export class ThirdPartyServicesService {
 
 
 /*
-email validator api key
-ev-54c43e66c50dbc66ee4b6c972d4ed0fc */
+canada post:
+Najjar.nadeem@hotmail.com
+email verfy:
+w.alnedfeh@itsnerd.com
+*/
+
+/*
+https://webstart.downloadwink.com/webstart/4353_N-WITS_U1GJ/launch.jnlp eyemaxx testing
+https://webstart.downloadwink.com/webstart/50048/launch.jnlp wink world
+*/
+
