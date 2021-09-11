@@ -94,7 +94,6 @@ export class ApproveDeclinePatientComponent implements OnInit, OnDestroy {
         if (x.firstName != 'n/a' &&
           x.lastName != 'n/a' &&
           x.birthDate != 'n/a' &&
-          x.email != 'n/a' &&
           x.cell != 'n/a' &&
           x.fullAddress != 'n/a' &&
           x.streetName != 'n/a' &&

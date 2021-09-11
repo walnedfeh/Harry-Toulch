@@ -52,11 +52,11 @@
                         <small>({{'patientform.formfields.fieldslablesextras.optional'| translate}})</small>
                     </mat-label>
                     <input type="email" formControlName="email" matInput placeholder="example@example.example">
-                    <mat-icon matSuffix *ngIf="f.email.touched"
+                    <mat-icon matSuffix *ngIf="f.email.value!=''"
                         [ngStyle]="{'color': f.email.errors?.notValidEmail==true || f.email.errors?.required ?'red':'#1af11a' }">
                         {{f.email.errors?.notValidEmail==true || f.email.errors?.required ? 'close' :'done'}}</mat-icon>
 
-                    <mat-error *ngIf="f.email.errors?.notValidEmail">
+                    <mat-error *ngIf="f.email.errors?.notValidEmail;">
                         {{'patientform.formfields.fieldsvalidationerrors.invemail2'|translate}}
                     </mat-error>
                     <mat-error *ngIf="PatientFormSubmitted && f.email.errors?.email">

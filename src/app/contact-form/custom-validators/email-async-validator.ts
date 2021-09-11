@@ -12,6 +12,9 @@ export class EmailAsyncValidator implements AsyncValidator {
     validate(
         ctrl: AbstractControl
     ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+        if (!ctrl.value) {
+            return of(null);
+        }
         return this.serv.VerifyEmailBoolBlur(ctrl.value).pipe(map((valid: boolean) => {
             return valid ? null : { notValidEmail: true };
         }), catchError(() => of(null)));

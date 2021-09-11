@@ -92,7 +92,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       lastName: ['', Validators.compose([Validators.required])],
       birthDate: ['', Validators.compose([Validators.required])],
       email: new FormControl('', {
-        updateOn: 'blur', validators: [Validators.required, Validators.email], asyncValidators: this.emailValidator.validate.bind(this)
+        updateOn: 'blur', validators: [Validators.email], asyncValidators: this.emailValidator.validate.bind(this.emailValidator)
       }),
       cell: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{3}[0-9]{3}[0-9]{4}')])],
       phone: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{3}[0-9]{3}[0-9]{4}')])],
@@ -112,7 +112,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       disclaimer: [false, Validators.requiredTrue]
     });
 
-    //  this.PatientForm.get('email')?.setErrors(null);
 
     this.filteredOptions = this.canadaAdressCompleteControl.valueChanges.pipe(
       startWith(''),
@@ -123,10 +122,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       })
     );
 
-    // this.filteredOptions.subscribe(t => {
 
-
-    // });
     this.PatientForm.get('manualAddressSelect')?.valueChanges.subscribe((t: boolean) => {
       this.PatientForm.controls.city.setValue('');
       this.PatientForm.controls.province.setValue('');
@@ -146,42 +142,30 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    // console.log(this.f.email.errors);
+
 
 
   }
 
-  // EmailOnBlur() {
-  //   const control = this.PatientForm.get('email');
-  //   if (control?.value != '') {
-  //     control?.setValidators(Validators.email);
-  //     control?.setAsyncValidators(this.emailValidator.validate.bind(this));
-  //     this.EmailValidationIconEnabled = true;
-  //     console.log(1);
+  EmailOnBlur() {
+    const control = this.PatientForm.get('email');
+    if (control?.value != '') {
+      control?.setValidators(Validators.email);
+      control?.setAsyncValidators(this.emailValidator.validate.bind(this));
+      this.EmailValidationIconEnabled = true;
+      console.log(1);
 
-  //   } else {
-  //     control?.clearValidators();
-  //     control?.clearAsyncValidators();
-  //     control?.setErrors(null);
-  //     this.EmailValidationIconEnabled = false;
-  //     console.log(2);
+    } else {
+      control?.clearValidators();
+      control?.clearAsyncValidators();
+      control?.setErrors(null);
+      this.EmailValidationIconEnabled = false;
+      console.log(2);
 
-  //   }
+    }
 
-  // }
+  }
 
-  // PhoneOnBlur() {
-  //   const control = this.PatientForm.get('phone');
-  //   if (control?.value != '') {
-  //     control?.setValidators(Validators.minLength(10));
-  //     control?.setValidators(Validators.maxLength(10));
-  //     control?.setValidators(Validators.pattern('[0-9]{3}[0-9]{3}[0-9]{4}'));
-  //   } else {
-  //     control?.clearValidators();
-  //     control?.setErrors(null);
-  //   }
-
-  // }
 
   RedirectAfterSubmit() {
     window.location.href = '/';
@@ -226,25 +210,44 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     //   p.phone = '';
     // }
     let phoneExists: boolean = this.PatientForm.get('phone')?.value != '';
+    let emailExists: boolean = this.PatientForm.get('email')?.value != '';
     p.fullAddress = this.canadaAdressCompleteControl.value.Text;
     let MatchedzCodes: ZCodeMatch[] = [];
-    // this.pserv.getPatientListByFirstLastNameZcodesMatch(p.firstName, p.lastName, 'First & Last Name').subscribe(u => {
-    //   MatchedzCodes.push(u);
-    this.pserv.getParamZcodesMatch('email', p.email, 'E-mail').subscribe(x => {
+    this.pserv.getParamZcodesMatch('mobile', p.cell, 'Cell').subscribe(x => {
       MatchedzCodes.push(x);
-      this.pserv.getParamZcodesMatch('mobile', p.cell, 'Cell').subscribe(y => {
-        MatchedzCodes.push(y);
-        if (phoneExists) {
-          this.pserv.getParamZcodesMatch('home', p.phone, 'Home').subscribe(z => {
-            MatchedzCodes.push(z);
+      if(emailExists){
+        this.pserv.getParamZcodesMatch('email', p.email, 'E-mail').subscribe(y => {
+          MatchedzCodes.push(y);
+          if (phoneExists) {
+            this.pserv.getParamZcodesMatch('home', p.phone, 'Home').subscribe(z => {
+              MatchedzCodes.push(z);
+              this.serv.VerifyEmailBool(p.email).subscribe(a => {
+                p.isValidEmail = a;
+                if (MatchedzCodes.length > 0) {
+                  p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
+                }
+                this.pserv.sendEmail(p).subscribe(b => {
+                  this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sent' });
+                  this.patientFormSpinnerEnabled = false;
+                  this.SubmitButtonDisabled = false;
+                  this.ThankYouDialogVisible = true;
+                  setTimeout(() => {
+                    this.RedirectAfterSubmit();
+                  }, 5000);
+                }, error => {
+                  this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
+                  this.patientFormSpinnerEnabled = false;
+                });
+              });
+            });
+          }
+          else {
             this.serv.VerifyEmailBool(p.email).subscribe(a => {
               p.isValidEmail = a;
               if (MatchedzCodes.length > 0) {
                 p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
               }
-              console.log(p);
-              console.log('with phone');
-
+  
               this.pserv.sendEmail(p).subscribe(b => {
                 this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sent' });
                 this.patientFormSpinnerEnabled = false;
@@ -254,36 +257,62 @@ export class PatientFormComponent implements OnInit, OnDestroy {
                   this.RedirectAfterSubmit();
                 }, 5000);
               }, error => {
-                this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
                 this.patientFormSpinnerEnabled = false;
+                this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
               });
             });
-          });
-        }
-        else {
-          this.serv.VerifyEmailBool(p.email).subscribe(a => {
-            p.isValidEmail = a;
-            if (MatchedzCodes.length > 0) {
-              p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
-            }
-            console.log(p);
-            console.log('without phone');
-
-            this.pserv.sendEmail(p).subscribe(b => {
-              this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sent' });
-              this.patientFormSpinnerEnabled = false;
-              this.SubmitButtonDisabled = false;
-              this.ThankYouDialogVisible = true;
-              setTimeout(() => {
-                this.RedirectAfterSubmit();
-              }, 5000);
-            }, error => {
-              this.patientFormSpinnerEnabled = false;
-              this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
-            });
-          });
-        }
-      });
+          }
+        });
+      }else{
+     //   this.pserv.getParamZcodesMatch('email', p.cell, 'E-mail').subscribe(y => {
+       //   MatchedzCodes.push(y);
+          if (phoneExists) {
+            this.pserv.getParamZcodesMatch('home', p.phone, 'Home').subscribe(z => {
+              MatchedzCodes.push(z);
+           //   this.serv.VerifyEmailBool(p.email).subscribe(a => {
+             //   p.isValidEmail = a;
+                if (MatchedzCodes.length > 0) {
+                  p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
+                }
+                this.pserv.sendEmail(p).subscribe(b => {
+                  this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sent' });
+                  this.patientFormSpinnerEnabled = false;
+                  this.SubmitButtonDisabled = false;
+                  this.ThankYouDialogVisible = true;
+                  setTimeout(() => {
+                    this.RedirectAfterSubmit();
+                  }, 5000);
+                }, error => {
+                  this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
+                  this.patientFormSpinnerEnabled = false;
+                });
+              });
+           // });
+          }
+          else {
+           // this.serv.VerifyEmailBool(p.email).subscribe(a => {
+             // p.isValidEmail = a;
+              if (MatchedzCodes.length > 0) {
+                p.zCodes = PrepareMatchedZcodeFieldsApi(ReverseZcodesMatchingFields(MatchedzCodes));
+              }
+  
+              this.pserv.sendEmail(p).subscribe(b => {
+                this.messageService.add({ severity: 'info', summary: 'Done', detail: 'You info has been sent' });
+                this.patientFormSpinnerEnabled = false;
+                this.SubmitButtonDisabled = false;
+                this.ThankYouDialogVisible = true;
+                setTimeout(() => {
+                  this.RedirectAfterSubmit();
+                }, 5000);
+              }, error => {
+                this.patientFormSpinnerEnabled = false;
+                this.messageService.add({ severity: 'error', summary: 'Failed', detail: 'An Error Occured ' });
+              });
+         //   });
+          }
+        // });
+      }
+     
     });
 
   }
